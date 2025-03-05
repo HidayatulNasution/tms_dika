@@ -6,7 +6,8 @@
         "dev": "nuxt dev --port 3001",
         "generate": "nuxt generate",
         "preview": "nuxt preview",
-        "postinstall": "nuxt prepare"
+        "postinstall": "nuxt prepare",
+        "start": "nuxt start"
     },
     "devDependencies": {
         "@nuxtjs/i18n": "^8.5.4",
