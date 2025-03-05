@@ -1,0 +1,22 @@
+version: "3.2"
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: reconcile-jakparkir
+    restart: always
+    environment:
+      - TZ=Asia/Jakarta
+    ports:
+      - "4002:4002"
+#    logging:
+#      driver: "json-file"
+#      options:
+#        max-size: "100m"
+#        max-file: "50"
+#    volumes:
+#      - type: bind
+#        source: ${HOME}/logs/mqtt-gateway
+#        target: /dist/log
+#    network_mode: bridge
