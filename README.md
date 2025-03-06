@@ -16,7 +16,9 @@ npm install
 # pnpm
 pnpm install --shamefully-hoist
 ```
+## Running Auto Migrate
 npm run migrate
+
 ## Development Server
 
 Start the development server on http://localhost:3000
