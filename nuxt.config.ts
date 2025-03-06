@@ -69,5 +69,13 @@ export default defineNuxtConfig({
         options: { linkExactActiveClass: 'active' },
     },
 
+    runtimeConfig: {
+        dbHost: process.env.DB_HOST,
+        dbPort: process.env.DB_PORT,
+        dbUser: process.env.DB_USER,
+        dbPassword: process.env.DB_PASSWORD,
+        dbName: process.env.DB_NAME
+      },
+
     compatibilityDate: '2024-09-21',
 });

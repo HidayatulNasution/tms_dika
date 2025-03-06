@@ -1,12 +1,4 @@
-import mysql from 'mysql2';
-
-const db = mysql.createConnection({
-  host: 'localhost',
-  port: 3306,
-  user: 'root',
-  password: '',
-  database: 'jakparkir'
-});
+import { pool } from '../database/config.js'; // Pastikan path ini sesuai dengan struktur folder Anda
 
 export default defineEventHandler(async (event) => {
   try {
@@ -39,14 +31,14 @@ export default defineEventHandler(async (event) => {
     ]);
 
     // Eksekusi query insert ke tabel merged_data
-    await db.promise().query(insertQuery, [values]);
+    await pool.query(insertQuery, [values]);
 
     // Hapus data dari tabel csv_transactions berdasarkan t_id
     const deleteQuery = "DELETE FROM csv_transactions WHERE t_id IN (?)";
     const tIds = data.map(item => item.t_id); // Ambil semua t_id dari data
 
     // Eksekusi query delete
-    await db.promise().query(deleteQuery, [tIds]);
+    await pool.query(deleteQuery, [tIds]);
 
     return { success: true, message: 'Data saved and corresponding csv_transactions deleted successfully' };
   } catch (error) {
