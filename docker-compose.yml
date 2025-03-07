@@ -10,6 +10,7 @@ services:
       - TZ=Asia/Jakarta
     ports:
       - "4002:4002"
+    command: sh -c "npm run migrate"
 #    logging:
 #      driver: "json-file"
 #      options:
