@@ -42,8 +42,32 @@ const datatable1Cols = [
   { field: 'created_at', title: 'Tanggal Transaksi' },
   { field: 'base_amount', title: 'Amount'},
   { field: 'payment_status', title: 'Status Payment' },
+  { field: 'mid', title: 'MID' },
+  { field: 'tid', title: 'TID' },
+  { field: 'username', title: 'Username' },
+  { field: 'merchant_id', title: 'Merchant ID' },
+  { field: 'name', title: 'Username' },
 
 ];
+
+const excelColumns = () => {
+        return {
+            'Request ID': 'request_id',
+            Tanggal: 'created_at',
+            'Base Amount': 'base_amount',          
+            Status: 'status',
+            'Status Payment': 'payment_status',
+            MID: 'mid',
+            TID: 'tid',
+            Username: 'username',
+            'Merchant ID': 'merchant_id',
+            Username: 'name'
+        };
+    };
+
+    const excelItems = () => {
+        return rows.value;
+    };
 </script>
 
 <template>
@@ -54,6 +78,11 @@ const datatable1Cols = [
         <div class="ltr:ml-auto rtl:mr-auto">
           <input v-model="search1" type="text" class="form-input w-auto" placeholder="🔍 Search" autofocus="on" />
         </div>
+        <vue3-json-excel class="btn btn-success btn-sm m-1 cursor-pointer" name="table.xls" :fields="excelColumns()" :json-data="excelItems()">
+                            <icon-file class="w-5 h-5 ltr:mr-2 rtl:ml-2" />
+
+                            EXCEL
+          </vue3-json-excel>
       </div>
       <div class="datatable">
         <div v-if="error">❌ Error: {{ error.message }}</div>

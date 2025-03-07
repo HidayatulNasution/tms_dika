@@ -5,7 +5,7 @@
                 <div class="flex items-center justify-between px-4 py-3">
                     <NuxtLink to="/" class="main-logo flex shrink-0 items-center">
                         <img class="ml-[5px] w-8 flex-none" src="/assets/images/logo.svg" alt="" />
-                        <span class="align-middle text-2xl font-semibold ltr:ml-1.5 rtl:mr-1.5 dark:text-white-light lg:inline">JAKPARKIR</span>
+                        <span class="align-middle text-2xl font-semibold ltr:ml-1.5 rtl:mr-1.5 dark:text-white-light lg:inline">DIKA</span>
                     </NuxtLink>
                     <a
                         href="javascript:;"
@@ -85,13 +85,13 @@
                                 <vue-collapsible :isOpen="activeDropdown === 'datatables'">
                                     <ul class="sub-menu text-gray-500">
                                      
-                                        <!-- <li>
+                                         <!-- <li>
                                             <NuxtLink to="/datatables/multiple-tables" @click="toggleMobileMenu">{{ $t('multiple_tables') }}</NuxtLink>
-                                        </li>
+                                        </li> -->
 
                                         <li>
                                             <NuxtLink to="/datatables/data-dika" @click="toggleMobileMenu">{{ $t('data-dika') }}</NuxtLink>
-                                        </li> -->
+                                        </li> 
                                      
                                         <!-- <li>
                                             <NuxtLink to="/datatables/range-search" @click="toggleMobileMenu">{{ $t('range_search') }}</NuxtLink>
