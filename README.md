@@ -16,6 +16,8 @@ npm install
 # pnpm
 pnpm install --shamefully-hoist
 ```
+## Running Auto Migrate
+npm run migrate
 
 ## Development Server
 
