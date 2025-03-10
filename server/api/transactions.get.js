@@ -1,4 +1,5 @@
 import pool from '../utils/db';
+import { defineEventHandler } from 'h3';
 
 export default defineEventHandler(async (event) => {
     try {

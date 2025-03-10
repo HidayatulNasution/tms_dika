@@ -1,5 +1,6 @@
 // Import koneksi pool dari config2.js
 import { pool2 } from "../database/config2";
+import { defineEventHandler } from 'h3';
 
 export default defineEventHandler(async (event) => {
   try {

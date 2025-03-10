@@ -1,4 +1,5 @@
 import { pool } from '../database/config.js'; // Pastikan path ini sesuai dengan struktur folder Anda
+import { defineEventHandler } from 'h3';
 
 export default defineEventHandler(async (event) => {
   try {

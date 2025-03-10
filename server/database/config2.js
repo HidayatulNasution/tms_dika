@@ -13,26 +13,6 @@ console.log
 console.log
 ('DB2_NAME:', process.env.DB2_NAME);
 
-// ❗️Buat file baru bernama env-parser.js di folder yang sama
-// env-parser.js
-// export const envToJson = (() => {
-//   try {
-//     const envFile = path.resolve('.env', 'utf8');
-//     return envFile
-//       .split('\n')
-//       .filter(line => line.trim() && !line.startsWith('#'))
-//       .reduce((acc, line) => {
-//         const [key, ...valueParts] = line.split('=');
-//         const value = valueParts.join('=').trim();
-//         acc[key.trim()] = value.replace(/^['"]|['"]$/g, '');
-//         return acc;
-//       }, {});
-//   } catch (error) {
-//     console.error('Gagal membaca .env:', error.message);
-//     return {};
-//   }
-// })();
-
 // Configurasi database
 const dbConfig = {
   host: process.env.DB2_HOST,

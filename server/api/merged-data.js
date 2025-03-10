@@ -1,6 +1,7 @@
 import mysql from 'mysql2';
 import { pool } from '../database/config.js';
 import { pool2 } from '../database/config2.js';
+import { defineEventHandler } from 'h3';
 
 export default defineEventHandler(async (event) => {
     try {
