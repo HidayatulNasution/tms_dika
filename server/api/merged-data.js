@@ -13,6 +13,7 @@ export default defineEventHandler(async (event) => {
         // Query data dari database kedua dengan urutan berdasarkan tanggal DESC
         const [rows2] = await pool.execute("SELECT t_id, tanggal, tarif, status, user, pembayaran, lokasi, kendaraan FROM csv_transactions ORDER BY tanggal DESC");
         console.log("Fetched rows from db2:", rows2);
+        
 
         // Merge data dari kedua tabel
         const mergedData = rows1.map(row1 => {

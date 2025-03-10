@@ -40,7 +40,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import Swal from 'sweetalert2';
 import Vue3Datatable from '@bhplugin/vue3-datatable';
 
