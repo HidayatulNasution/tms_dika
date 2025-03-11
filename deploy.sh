@@ -30,8 +30,8 @@ else
 fi
 
 echo "Building & Running Image $PROJECT..."
-docker compose --env-file docker.env -p "$PROJECT" build --no-cache
-docker compose --env-file docker.env -p "$PROJECT" up -d --force-recreate
+sudo docker compose --env-file docker.env -p "$PROJECT" build --no-cache
+sudo docker compose --env-file docker.env -p "$PROJECT" up -d --force-recreate
 
 # Check the exit code of the last command
 if [ $? -ne 0 ]; then
