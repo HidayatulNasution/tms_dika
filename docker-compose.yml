@@ -1,23 +1,40 @@
-version: "3.2"
+version: '3.8'
+
 services:
   app:
     build:
-      context: ./
-      dockerfile: Dockerfile
-    container_name: reconcile-jakparkir
-    restart: always
+      context: .
+      dockerfile: ${DOCKERFILE}
+    image: "${IMG_NAME}:${TAG}"
+    container_name: "${APP_NAME}-${TAG}"
     environment:
-      - TZ=Asia/Jakarta
+      - TZ=${TZ}
     ports:
-      - "4002:3000"
-#    command: sh -c "npm run migrate"
-#    logging:
-#      driver: "json-file"
-#      options:
-#        max-size: "100m"
-#        max-file: "50"
-#    volumes:
-#      - type: bind
-#        source: ${HOME}/logs/mqtt-gateway
-#        target: /dist/log
-#    network_mode: bridge
+      - "${EXP_PORT}:${APP_PORT}"
+    networks:
+      - app_network
+    env_file:
+      - docker.env
+    restart: unless-stopped
+    # volumes:
+    # logging:
+    #   driver: "json-file"
+    #   options:
+    #     max-size: "10m"
+    #     max-file: "3"
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:${APP_PORT}"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
+    # deploy:
+    #   resources:
+    #     limits:
+    #       memory: 512M
+    #     reservations:
+    #       memory: 256M
+
+networks:
+  app_network:
+    name: "${APP_NETWORK}-${TAG}"
+    driver: bridge
