@@ -1,10 +1,23 @@
 // Import koneksi pool dari config2.js
 import { pool2 } from "../database/config2";
-import { defineEventHandler } from 'h3';
+import { defineEventHandler, getQuery } from 'h3';
 
 export default defineEventHandler(async (event) => {
   try {
     console.log("🚀 Connecting to database...");
+    
+    // Get query parameters
+    const query = getQuery(event);
+    const startDate = query.startDate;
+    const endDate = query.endDate;
+
+    let dateFilter = '';
+    let params = ['%SUCCESS%'];
+
+    if (startDate && endDate) {
+      dateFilter = 'AND DATE(f.created_at) BETWEEN ? AND ?';
+      params.push(startDate, endDate);
+    }
 
     // Query gabungan untuk mendapatkan data dari ketiga tabel
     const [rows] = await pool2.execute(
@@ -25,11 +38,12 @@ export default defineEventHandler(async (event) => {
        JOIN 
           merchant_detail d ON m.merchant_id = d.merchant_id
        WHERE 
-         f.payment_status LIKE ?           
+          f.payment_status LIKE ?
+          ${dateFilter}           
        ORDER BY 
           f.mid DESC LIMIT 15000
        `,
-      ['%SUCCESS%']
+      params
     );
 
     console.log("📊 Data retrieved:", rows.length, "rows");

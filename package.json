@@ -2,8 +2,8 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "build": "nuxt build",        
-        "dev": "HOST=0.0.0.0 nuxt dev",
+        "build": "nuxt build",
+        "dev": "nuxt dev --port 3001",
         "generate": "nuxt generate",
         "preview": "nuxt preview",
         "postinstall": "nuxt prepare",
@@ -78,6 +78,7 @@
         "vue3-number-spinner": "^0.0.9",
         "vue3-perfect-scrollbar": "^2.0.0",
         "vue3-popper": "^1.5.0",
-        "vue3-quill": "^0.3.1"
+        "vue3-quill": "^0.3.1",
+        "vuejs3-datepicker": "^1.1.3"
     }
 }

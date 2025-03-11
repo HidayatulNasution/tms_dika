@@ -1,8 +1,31 @@
 <script setup>
 import Vue3Datatable from '@bhplugin/vue3-datatable';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
+import Datepicker from 'vuejs3-datepicker';
 
-// Fetch data from API
+// Define reactive variables for date range
+const dateRange = ref({
+  startDate: '',
+  endDate: ''
+});
+
+// Fetch data from API with date range
+const fetchData = async () => {
+  const queryParams = new URLSearchParams();
+  if (dateRange.value.startDate && dateRange.value.endDate) {
+    queryParams.append('startDate', formatDateForAPI(dateRange.value.startDate));
+    queryParams.append('endDate', formatDateForAPI(dateRange.value.endDate));
+  }
+  
+  const { data: newData, error: newError } = await useFetch(`/api/getFiles?${queryParams}`);
+  if (newError.value) {
+    console.error('❌ Error fetching data:', newError.value);
+  } else {
+    rows.value = newData.value || [];
+  }
+};
+
+// Initial data fetch
 const { data, error } = await useFetch('/api/getFiles');
 if (error.value) {
   console.error('❌ Error fetching data:', error.value);
@@ -12,7 +35,14 @@ if (error.value) {
 const rows = ref(data.value || []);
 const search1 = ref('');
 
-// Format date function
+// Watch for date range changes
+watch(dateRange, async () => {
+  if (dateRange.value.startDate && dateRange.value.endDate) {
+    await fetchData();
+  }
+}, { deep: true });
+
+// Format date for display
 const formatDate = (date) => {
   if (date) {
     const dt = new Date(date);
@@ -23,6 +53,24 @@ const formatDate = (date) => {
   return '';
 };
 
+// Format date for API
+const formatDateForAPI = (date) => {
+  if (date) {
+    const dt = new Date(date);
+    return dt.toISOString().split('T')[0];
+  }
+  return '';
+};
+
+// Handle date selection
+const onStartDateSelect = (date) => {
+  dateRange.value.startDate = date;
+};
+
+const onEndDateSelect = (date) => {
+  dateRange.value.endDate = date;
+};
+
 // Random color for badge
 const viewColor = () => {
   const color = ['success'];
@@ -31,10 +79,10 @@ const viewColor = () => {
 };
 
 const colorAmount = () => {
-    const color = ['dark'];
-    const random = Math.floor(Math.random() * color.length);
-    return color[random];
-}
+  const color = ['dark'];
+  const random = Math.floor(Math.random() * color.length);
+  return color[random];
+};
 
 // Define columns for the datatable
 const datatable1Cols = [
@@ -47,27 +95,26 @@ const datatable1Cols = [
   { field: 'username', title: 'Username' },
   { field: 'merchant_id', title: 'Merchant ID' },
   { field: 'name', title: 'Username' },
-
 ];
 
 const excelColumns = () => {
-        return {
-            'Request ID': 'request_id',
-            Tanggal: 'created_at',
-            'Base Amount': 'base_amount',          
-            Status: 'status',
-            'Status Payment': 'payment_status',
-            MID: 'mid',
-            TID: 'tid',
-            Username: 'username',
-            'Merchant ID': 'merchant_id',
-            Username: 'name'
-        };
-    };
+  return {
+    'Request ID': 'request_id',
+    Tanggal: 'created_at',
+    'Base Amount': 'base_amount',          
+    Status: 'status',
+    'Status Payment': 'payment_status',
+    MID: 'mid',
+    TID: 'tid',
+    Username: 'username',
+    'Merchant ID': 'merchant_id',
+    Username: 'name'
+  };
+};
 
-    const excelItems = () => {
-        return rows.value;
-    };
+const excelItems = () => {
+  return rows.value;
+};
 </script>
 
 <template>
@@ -75,15 +122,41 @@ const excelColumns = () => {
     <div class="panel mt-6 pb-0">
       <div class="mb-5 flex flex-col gap-5 md:flex-row md:items-center">
         <h5 class="text-lg font-semibold dark:text-white-light">Monitoring Data Dika</h5>
+        
+        <!-- Date Range Picker -->
+        <div class="flex items-center gap-2">
+          <Datepicker
+            v-model="dateRange.startDate"
+            @selected="onStartDateSelect"
+            placeholder="Start Date"
+            format="dd/MM/yyyy"
+            input-class-name="form-input"
+          />
+          <span>to</span>
+          <Datepicker
+            v-model="dateRange.endDate"
+            @selected="onEndDateSelect"
+            placeholder="End Date"
+            format="dd/MM/yyyy"
+            input-class-name="form-input"
+          />
+        </div>
+
         <div class="ltr:ml-auto rtl:mr-auto">
           <input v-model="search1" type="text" class="form-input w-auto" placeholder="🔍 Search" autofocus="on" />
         </div>
-        <vue3-json-excel class="btn btn-success btn-sm m-1 cursor-pointer" name="table.xls" :fields="excelColumns()" :json-data="excelItems()">
-                            <icon-file class="w-5 h-5 ltr:mr-2 rtl:ml-2" />
-
-                            EXCEL
-          </vue3-json-excel>
+        
+        <vue3-json-excel 
+          class="btn btn-success btn-sm m-1 cursor-pointer" 
+          :name="'data_' + formatDateForAPI(dateRange.startDate) + '_to_' + formatDateForAPI(dateRange.endDate) + '.xls'"
+          :fields="excelColumns()" 
+          :json-data="excelItems()"
+        >
+          <icon-file class="w-5 h-5 ltr:mr-2 rtl:ml-2" />
+          EXCEL
+        </vue3-json-excel>
       </div>
+
       <div class="datatable">
         <div v-if="error">❌ Error: {{ error.message }}</div>
         <vue3-datatable
@@ -110,7 +183,7 @@ const excelColumns = () => {
           </template>
           <template #base_amount="data">
             <div class="badge" :class="`bg-${colorAmount()}`">
-                {{ data.value.base_amount }}
+              {{ data.value.base_amount }}
             </div>
           </template>
           <template #payment_status="data">
@@ -118,16 +191,6 @@ const excelColumns = () => {
               {{ data.value.payment_status }}
             </div>
           </template>
-          <!-- <template #action>
-            <div class="text-center">
-              <client-only>
-                <button type="button" v-tippy>
-                  <icon-x-circle />
-                </button>
-                <tippy>Delete</tippy>
-              </client-only>
-            </div>
-          </template> -->
         </vue3-datatable>
       </div>
     </div>
