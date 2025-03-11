@@ -14,20 +14,16 @@ console.log
 ('DB2_NAME:', process.env.DB2_NAME);
 
 // Configurasi database
-const dbConfig = {
+// Create the second connection pool
+export const pool2 = mysql.createPool({
   host: process.env.DB2_HOST,
-  port: process.env.DB2_PORT,
+  port: Number(process.env.DB2_PORT),
   user: process.env.DB2_USER,
   password: process.env.DB2_PASSWORD,
-  database: process.env.DB2_NAME
-};
-
-// Tambahkan log untuk verifikasi
-console.log('Konfigurasi Database:');
-console.log('Host:', dbConfig.host);
-console.log('Port:', dbConfig.port);
-console.log('User:', dbConfig.user);
-console.log('Password:', dbConfig.password ? '******' : 'KOSONG');
-console.log('Database:', dbConfig.database);
-
-export const pool2 = mysql.createPool(dbConfig);
+  database: process.env.DB2_NAME,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
+  enableKeepAlive: true,
+  keepAliveInitialDelay: 0
+});

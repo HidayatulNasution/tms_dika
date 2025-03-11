@@ -27,7 +27,7 @@ export default defineEventHandler(async (event) => {
        WHERE 
          f.payment_status LIKE ?           
        ORDER BY 
-          f.mid DESC 
+          f.mid DESC LIMIT 15000
        `,
       ['%SUCCESS%']
     );

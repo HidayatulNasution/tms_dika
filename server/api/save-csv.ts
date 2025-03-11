@@ -8,6 +8,7 @@ function convertDateFormat(dateStr: string) {
 }
 
 export default defineEventHandler(async (event) => {
+  console.log('Received request:', event.node.req.method, event.node.req.url);
   try {
     const data = await readBody(event);
 

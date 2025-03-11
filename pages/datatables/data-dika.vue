@@ -25,7 +25,7 @@ const formatDate = (date) => {
 
 // Random color for badge
 const viewColor = () => {
-  const color = ['primary', 'secondary', 'success', 'info'];
+  const color = ['success'];
   const random = Math.floor(Math.random() * color.length);
   return color[random];
 };

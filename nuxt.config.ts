@@ -94,4 +94,8 @@ export default defineNuxtConfig({
       },
 
     compatibilityDate: '2024-09-21',
+    devtools: { enabled: false },
+    nitro: {
+    preset: 'node-server'
+  }
 });
