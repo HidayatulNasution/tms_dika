@@ -152,7 +152,9 @@ const saveToDatabase = async () => {
             timer: 2000, // Menutup otomatis setelah 2 detik
             showConfirmButton: false // Hilangkan tombol OK
         })
-        
+        .then(() => {
+            window.location.reload(); // Muat ulang halaman
+        });        
     } else if (result.dismiss === Swal.DismissReason.cancel) {
         // Tampilkan notifikasi pembatalan
         swalWithBootstrapButtons.fire({

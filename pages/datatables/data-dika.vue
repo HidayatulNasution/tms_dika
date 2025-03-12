@@ -1,88 +1,91 @@
 <script setup>
 import Vue3Datatable from '@bhplugin/vue3-datatable';
-import { ref, watch } from 'vue';
+import { ref, onMounted } from 'vue';
 import DatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 
-// Define reactive variables for date range
+// Initialize date range with yesterday's date for start and end
+const today = new Date();
+const yesterday = new Date(today);
+yesterday.setDate(yesterday.getDate() - 1);
+
 const dateRange = ref({
-  startDate: '',
-  endDate: ''
+  startDate: yesterday,
+  endDate: yesterday
 });
 
-// Fetch data from API with date range
-const fetchData = async () => {
-  const queryParams = new URLSearchParams();
-  if (dateRange.value.startDate && dateRange.value.endDate) {
-    queryParams.append('startDate', formatDateForAPI(dateRange.value.startDate));
-    queryParams.append('endDate', formatDateForAPI(dateRange.value.endDate));
-  }
-  
-  const { data: newData, error: newError } = await useFetch(`/api/getFiles?${queryParams}`);
-  if (newError.value) {
-    console.error('❌ Error fetching data:', newError.value);
-  } else {
-    rows.value = newData.value || [];
-  }
-};
-
-// Initial data fetch
-const { data, error } = await useFetch('/api/getFiles');
-if (error.value) {
-  console.error('❌ Error fetching data:', error.value);
-}
-
-// Define reactive variables
-const rows = ref(data.value || []);
+// Initialize rows with empty array
+const rows = ref([]);
+const isLoading = ref(true);
 const search1 = ref('');
-
-// Watch for date range changes
-watch(dateRange, async () => {
-  if (dateRange.value.startDate && dateRange.value.endDate) {
-    await fetchData();
-  }
-}, { deep: true });
-
-// Format date for display
-const formatDate = (date) => {
-  if (date) {
-    const dt = new Date(date);
-    const month = dt.getMonth() + 1 < 10 ? '0' + (dt.getMonth() + 1) : dt.getMonth() + 1;
-    const day = dt.getDate() < 10 ? '0' + dt.getDate() : dt.getDate();
-    return day + '/' + month + '/' + dt.getFullYear();
-  }
-  return '';
-};
 
 // Format date for API
 const formatDateForAPI = (date) => {
-  if (date) {
-    const dt = new Date(date);
-    return dt.toISOString().split('T')[0];
+  if (!date) return '';
+  const dt = new Date(date);
+  return dt.toISOString().split('T')[0];
+};
+
+// Format date for display
+const formatDate = (date) => {
+  if (!date) return '';
+  const dt = new Date(date);
+  const month = (dt.getMonth() + 1).toString().padStart(2, '0');
+  const day = dt.getDate().toString().padStart(2, '0');
+  return `${day}/${month}/${dt.getFullYear()}`;
+};
+
+// Fetch data from API with date range
+const fetchData = async () => {
+  isLoading.value = true;
+  try {
+    const startDate = formatDateForAPI(dateRange.value.startDate);
+    const endDate = formatDateForAPI(dateRange.value.endDate);
+    
+    const { data } = await useFetch('/api/getFiles', {
+      method: 'GET',
+      params: {
+        startDate,
+        endDate
+      }
+    });
+
+    if (data.value) {
+      rows.value = data.value;
+    } else {
+      rows.value = [];
+    }
+  } catch (error) {
+    console.error('❌ Error fetching data:', error);
+    rows.value = [];
+  } finally {
+    isLoading.value = false;
   }
-  return '';
+};
+
+// Search function
+const onSearch = async () => {
+  await fetchData();
 };
 
 // Handle date selection
-const onStartDateSelect = (date) => {
+const onStartDateSelect = async (date) => {
   dateRange.value.startDate = date;
+ // await fetchData();
 };
 
-const onEndDateSelect = (date) => {
+const onEndDateSelect = async (date) => {
   dateRange.value.endDate = date;
+  // await fetchData();
 };
 
 // Random color for badge
 const viewColor = () => {
-  const color = ['success'];
-  const random = Math.floor(Math.random() * color.length);
-  return color[random];
+  return 'success';
 };
 
 const colorAmount = () => {
-  const color = ['dark'];
-  const random = Math.floor(Math.random() * color.length);
-  return color[random];
+  return 'dark';
 };
 
 // Define columns for the datatable
@@ -116,6 +119,11 @@ const excelColumns = () => {
 const excelItems = () => {
   return rows.value;
 };
+
+// Fetch data on component mount
+onMounted(async () => {
+  await fetchData();
+});
 </script>
 
 <template>
@@ -133,6 +141,8 @@ const excelItems = () => {
             format="dd/MM/yyyy"
             :enable-time-picker="false"
             class="form-input"
+            :min-date="new Date('2024-01-01')"
+            :max-date="today"
           />
           <span>to</span>
           <DatePicker
@@ -142,16 +152,19 @@ const excelItems = () => {
             format="dd/MM/yyyy"
             :enable-time-picker="false"
             class="form-input"
+            :min-date="new Date('2024-01-01')"
+            :max-date="today"
           />
         </div>
+        <button @click="onSearch" class="btn btn-primary h-12">Apply</button>
 
         <div class="ltr:ml-auto rtl:mr-auto">
-          <input v-model="search1" type="text" class="form-input w-auto" placeholder="🔍 Search" autofocus="on" />
+          <input v-model="search1" type="text" class="form-input w-auto" placeholder="🔍 Search" />
         </div>
         
         <vue3-json-excel 
           class="btn btn-success btn-sm m-1 cursor-pointer" 
-          :name="'data_' + formatDateForAPI(dateRange.startDate) + '_to_' + formatDateForAPI(dateRange.endDate) + '.xls'"
+          :name="`data_${formatDateForAPI(dateRange.startDate)}_to_${formatDateForAPI(dateRange.endDate)}.xls`"
           :fields="excelColumns()" 
           :json-data="excelItems()"
         >
@@ -161,14 +174,21 @@ const excelItems = () => {
       </div>
 
       <div class="datatable">
-        <div v-if="error">❌ Error: {{ error.message }}</div>
+        <div v-if="isLoading" class="flex justify-center items-center p-4">
+          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+        </div>
+        
+        <div v-else-if="rows.length === 0" class="text-center py-4">
+          No data available
+        </div>
+        
         <vue3-datatable
           v-else
           :rows="rows"
           :columns="datatable1Cols"
-          :totalRows="rows?.length"
+          :totalRows="rows.length"
           :sortable="true"
-          sortColumn="request_id"
+          sortColumn="created_at"
           :search="search1"
           skin="whitespace-nowrap bh-table-hover"
           firstArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M13 19L7 12L13 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path opacity="0.5" d="M16.9998 19L10.9998 12L16.9998 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>'

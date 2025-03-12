@@ -23,10 +23,10 @@
                                     <template #content="{ close }">
                                         <ul @click="close()" class="text-black dark:text-white-dark">
                                             <!-- <li>
-                                                <a href="#" @click="toggleHistori">{{ isHistoryVisible ? 'Hidden History' : 'History Proses' }}</a>
+                                                <a href="#" @click="toggleHistori">{{ isHistoryVisible ? 'Hiden History' : 'History Proses' }}</a>
                                             </li> -->
                                             <li>
-                                                <a href="#" @click="toggleUpload">{{ isUploadVisible ? 'Hidde Upload' : 'Upload Data' }}</a>
+                                                <a href="#" @click="toggleUpload">{{ isUploadVisible ? 'Hide Upload' : 'Upload Data' }}</a>
                                             </li>                                            
                                         </ul>
                                     </template>
@@ -53,10 +53,10 @@
                                     <template #content="{ close }">
                                         <ul @click="close()" class="text-black dark:text-white-dark">
                                             <li>
-                                                <a href="#" @click="toggleMerged">{{ isMergedVisible ? 'Hidde Result' : 'Hasil Sinkron' }}</a>
+                                                <a href="#" @click="toggleMerged">{{ isMergedVisible ? 'Hide Result' : 'Hasil Sinkron' }}</a>
                                             </li>
                                             <li>
-                                                <a href="#" @click="toggleSinkronisasi">{{ isSinkronisasiVisible ? 'Hidde Sinkron' : 'Proses Sinkron' }}</a>
+                                                <a href="#" @click="toggleSinkronisasi">{{ isSinkronisasiVisible ? 'Hide Sinkron' : 'Proses Sinkron' }}</a>
                                             </li>
                                         </ul>
                                     </template>
@@ -86,7 +86,7 @@
                                     <template #content="{ close }">
                                         <ul @click="close()" class="text-black dark:text-white-dark">
                                             <li>
-                                                <a href="#" @click="toggleGrafik">{{ isGrafikVisible ? 'Hidde Grafik' : 'View Grafik' }}</a>
+                                                <a href="#" @click="toggleGrafik">{{ isGrafikVisible ? 'Hide Grafik' : 'View Grafik' }}</a>
                                             </li>
                                             
                                         </ul>
@@ -116,7 +116,7 @@
                                     <template #content="{ close }">
                                         <ul @click="close()" class="text-black dark:text-white-dark">
                                             <li>
-                                                <a href="#" @click="toggleHistori">{{ isHistoryVisible ? 'Hidde History' : 'History Upload' }}</a>
+                                                <a href="#" @click="toggleHistori">{{ isHistoryVisible ? 'Hide History' : 'History Upload' }}</a>
                                             </li>                                            
                                         </ul>
                                     </template>
