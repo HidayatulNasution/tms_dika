@@ -13,7 +13,7 @@
                 <!-- Upload CSV -->
                 <div class="panel bg-gradient-to-r from-cyan-500 to-cyan-400">
                     <div class="flex justify-between">
-                        <div class="text-md font-semibold ltr:mr-1 rtl:ml-1">Upload CSV</div>
+                        <div class="text-md font-semibold ltr:mr-1 rtl:ml-1">Upload Data Jakparkir</div>
                         <div class="dropdown">
                             <client-only>
                                 <Popper :placement="store.rtlClass === 'rtl' ? 'bottom-start' : 'bottom-end'" offsetDistance="0" class="align-middle">
@@ -26,7 +26,7 @@
                                                 <a href="#" @click="toggleHistori">{{ isHistoryVisible ? 'Hidden History' : 'History Proses' }}</a>
                                             </li> -->
                                             <li>
-                                                <a href="#" @click="toggleUpload">{{ isUploadVisible ? 'Hidden Proses' : 'Proses Data' }}</a>
+                                                <a href="#" @click="toggleUpload">{{ isUploadVisible ? 'Hidde Upload' : 'Upload Data' }}</a>
                                             </li>                                            
                                         </ul>
                                     </template>
@@ -34,14 +34,11 @@
                             </client-only>
                         </div>
                     </div>
-                    <!-- <div class="mt-5 flex items-center">
-                        <div class="text-3xl font-bold ltr:mr-3 rtl:ml-3">Total Upload</div>
-                        <div class="badge bg-white/30">+ %</div>
-                    </div>
-                    <div class="mt-5 flex items-center font-semibold">
-                        <icon-eye class="shrink-0 ltr:mr-2 rtl:ml-2" />
-                        Count 
-                    </div> -->                   
+                     <!-- <div class="mt-5 flex items-center">
+                        <div class="text-3xl font-bold ltr:mr-3 rtl:ml-3">100</div>
+                        <div class="badge bg-white/30">Total Upload</div>
+                    </div> -->
+                                      
                 </div>  
                               <!-- Sinkronisasi -->
                  <div class="panel bg-gradient-to-r from-violet-500 to-violet-400">
@@ -56,10 +53,10 @@
                                     <template #content="{ close }">
                                         <ul @click="close()" class="text-black dark:text-white-dark">
                                             <li>
-                                                <a href="#" @click="toggleMerged">{{ isMergedVisible ? 'Hidden Result' : 'Hasil Sinkron' }}</a>
+                                                <a href="#" @click="toggleMerged">{{ isMergedVisible ? 'Hidde Result' : 'Hasil Sinkron' }}</a>
                                             </li>
                                             <li>
-                                                <a href="#" @click="toggleSinkronisasi">{{ isSinkronisasiVisible ? 'Hidden Sinkron' : 'Proses Sinkron' }}</a>
+                                                <a href="#" @click="toggleSinkronisasi">{{ isSinkronisasiVisible ? 'Hidde Sinkron' : 'Proses Sinkron' }}</a>
                                             </li>
                                         </ul>
                                     </template>
@@ -67,14 +64,14 @@
                             </client-only>
                         </div>
                     </div>
-                    <!-- <div class="mt-5 flex items-center">
+                     <!-- <div class="mt-5 flex items-center">
                         <div class="text-3xl font-bold ltr:mr-3 rtl:ml-3">74,137</div>
                         <div class="badge bg-white/30">- 2.35%</div>
-                    </div> -->
-                    <!-- <div class="mt-5 flex items-center font-semibold">
+                    </div>
+                     <div class="mt-5 flex items-center font-semibold">
                         <icon-eye class="shrink-0 ltr:mr-2 rtl:ml-2" />
                         Last Week 84,709
-                    </div> -->
+                    </div>  -->
                 </div>
                 <!-- Grafik -->
                 <div class="panel bg-gradient-to-r from-blue-500 to-blue-400">
@@ -89,7 +86,7 @@
                                     <template #content="{ close }">
                                         <ul @click="close()" class="text-black dark:text-white-dark">
                                             <li>
-                                                <a href="#" @click="toggleGrafik">{{ isGrafikVisible ? 'Hidden Grafik' : 'View Grafik' }}</a>
+                                                <a href="#" @click="toggleGrafik">{{ isGrafikVisible ? 'Hidde Grafik' : 'View Grafik' }}</a>
                                             </li>
                                             
                                         </ul>
@@ -109,7 +106,7 @@
                 </div>
                 <div class="panel bg-gradient-to-r from-fuchsia-500 to-fuchsia-400">
                     <div class="flex justify-between">
-                        <div class="text-md font-semibold ltr:mr-1 rtl:ml-1">History CSV Upload</div>
+                        <div class="text-md font-semibold ltr:mr-1 rtl:ml-1">History Data</div>
                         <div class="dropdown">
                             <client-only>
                                 <Popper :placement="store.rtlClass === 'rtl' ? 'bottom-start' : 'bottom-end'" offsetDistance="0" class="align-middle">
@@ -119,7 +116,7 @@
                                     <template #content="{ close }">
                                         <ul @click="close()" class="text-black dark:text-white-dark">
                                             <li>
-                                                <a href="#" @click="toggleHistori">{{ isHistoryVisible ? 'Hidden History' : 'History Upload' }}</a>
+                                                <a href="#" @click="toggleHistori">{{ isHistoryVisible ? 'Hidde History' : 'History Upload' }}</a>
                                             </li>                                            
                                         </ul>
                                     </template>

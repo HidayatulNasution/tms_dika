@@ -1,7 +1,8 @@
 <script setup>
 import Vue3Datatable from '@bhplugin/vue3-datatable';
 import { ref, watch } from 'vue';
-import Datepicker from 'vuejs3-datepicker';
+import DatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
 
 // Define reactive variables for date range
 const dateRange = ref({
@@ -125,20 +126,22 @@ const excelItems = () => {
         
         <!-- Date Range Picker -->
         <div class="flex items-center gap-2">
-          <Datepicker
+          <DatePicker
             v-model="dateRange.startDate"
-            @selected="onStartDateSelect"
+            @update:model-value="onStartDateSelect"
             placeholder="Start Date"
             format="dd/MM/yyyy"
-            input-class-name="form-input"
+            :enable-time-picker="false"
+            class="form-input"
           />
           <span>to</span>
-          <Datepicker
+          <DatePicker
             v-model="dateRange.endDate"
-            @selected="onEndDateSelect"
+            @update:model-value="onEndDateSelect"
             placeholder="End Date"
             format="dd/MM/yyyy"
-            input-class-name="form-input"
+            :enable-time-picker="false"
+            class="form-input"
           />
         </div>
 

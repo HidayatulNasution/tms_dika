@@ -41,7 +41,7 @@
                     <div class="mt-5 flex items-center font-semibold">
                         <icon-eye class="shrink-0 ltr:mr-2 rtl:ml-2" />
                         Count 
-                    </div> -->                   
+                    </div>                    -->
                 </div>  
                               <!-- Sinkronisasi -->
                  <div class="panel bg-gradient-to-r from-violet-500 to-violet-400">
