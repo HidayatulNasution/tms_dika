@@ -13,7 +13,7 @@
                 <!-- Upload CSV -->
                 <div class="panel bg-gradient-to-r from-cyan-500 to-cyan-400">
                     <div class="flex justify-between">
-                        <div class="text-md font-semibold ltr:mr-1 rtl:ml-1">Upload Data Jakparkir</div>
+                        <div class="text-md font-semibold ltr:mr-1 rtl:ml-1">Upload Data</div>
                         <div class="dropdown">
                             <client-only>
                                 <Popper :placement="store.rtlClass === 'rtl' ? 'bottom-start' : 'bottom-end'" offsetDistance="0" class="align-middle">
