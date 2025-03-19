@@ -108,6 +108,15 @@
                         >
                             <icon-laptop />
                         </a>
+                        
+                    </div>
+                    <div>
+                        <button 
+                @click="handleLogout" 
+                class="btn btn-danger flex items-center rounded-full bg-red-light/40 p-2 hover:bg-red-light/40 hover:text-primary dark:bg-dark/40 dark:hover:bg-dark/20"
+                >
+                <icon-logout class="h-5 w-5 transform rotate-90"/>
+                </button>
                     </div>
 
                     <!-- <div class="dropdown shrink-0">
@@ -875,15 +884,16 @@
 
 <script lang="ts" setup>
     import { ref, onMounted, computed, reactive, watch } from 'vue';
-
+    import Swal from 'sweetalert2';
     import appSetting from '@/app-setting';
-
+    import { useRouter } from 'vue-router';
     import { useRoute } from 'vue-router';
     import { useAppStore } from '@/stores/index';
     const store = useAppStore();
     const route = useRoute();
     const search = ref(false);
     const { setLocale } = useI18n();
+    const router = useRouter();
 
     // multi language
     const changeLanguage = (item: any) => {
@@ -981,4 +991,32 @@
     const removeMessage = (value: number) => {
         messages.value = messages.value.filter((d) => d.id !== value);
     };
+
+    // Fungsi Logout
+const handleLogout = async () => {
+  try {
+    // Hapus token atau session pengguna
+    localStorage.removeItem('authToken'); // Contoh: hapus token dari localStorage
+    useCookie('authToken').value = null;
+    
+    // Tampilkan notifikasi logout berhasil
+    await Swal.fire({
+      icon: 'success',
+      title: 'Logout Successful!',
+      text: 'You have been logged out.',
+      timer: 1500,
+      showConfirmButton: false
+    });
+
+    // Redirect ke halaman index.vue
+    router.push('/');
+  } catch (error) {
+    console.error('Logout error:', error);
+    Swal.fire({
+      icon: 'error',
+      title: 'Error!',
+      text: 'An error occurred during logout',
+    });
+  }
+};
 </script>

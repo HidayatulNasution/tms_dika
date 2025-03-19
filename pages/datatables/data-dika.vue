@@ -4,6 +4,10 @@ import { ref, onMounted } from 'vue';
 import DatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 
+definePageMeta({
+    middleware: 'auth'
+});
+
 // Initialize date range with yesterday's date for start and end
 const today = new Date();
 const yesterday = new Date(today);

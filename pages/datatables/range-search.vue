@@ -4,7 +4,8 @@
             <h5 class="text-lg font-semibold dark:text-white-light drop-shadow-[0px_10px_5px_rgba(0,0,0,0.6)]">Upload CSV</h5><br>       
             <div class="datatable">
                 <!-- Form Upload -->
-                <div class="flex items-center justify-left">
+                
+                <div class="flex items-center justify-left space-x-4 mb-4">
                     <!-- Tombol Upload File CSV -->
                     <button 
                         @click="handleFileUpload" 
@@ -16,7 +17,20 @@
                         <!-- Teks Tombol -->
                         Upload File CSV
                     </button>
-                </div>    
+                    
+                    <button 
+                        v-if="csvData.length" 
+                        @click="saveToDatabase" 
+                        class="cursor-pointer bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out flex items-center"
+                    >
+                        <!-- Ikon Save -->
+                        <icon-save class="w-5 h-5 ltr:mr-2 rtl:ml-2" />
+                        <!-- Teks Tombol -->
+                        Save
+                    </button>
+                
+                </div>
+                    
 
                 <!-- Tampilkan Data CSV -->
                 <table v-if="csvData.length">
@@ -32,19 +46,8 @@
                     </tbody>
                 </table>
 
-                <!-- Button Simpan ke Database -->
-                <div class="flex items-center justify-center mt-4">
-                    <button 
-                        v-if="csvData.length" 
-                        @click="saveToDatabase" 
-                        class="cursor-pointer bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out flex items-center"
-                    >
-                        <!-- Ikon Save -->
-                        <icon-save class="w-5 h-5 ltr:mr-2 rtl:ml-2" />
-                        <!-- Teks Tombol -->
-                        Simpan ke Database
-                    </button>
-                </div>
+                
+                
             </div>
         </div>
     </div> 
@@ -55,6 +58,10 @@ import { ref } from 'vue';
 import Swal from 'sweetalert2'; // Impor SweetAlert2
 import Papa from 'papaparse';
 useHead({ title: 'Upload CSV' });
+
+definePageMeta({
+    middleware: 'auth'
+});
 
 const file = ref(null);
 const csvData = ref([]);

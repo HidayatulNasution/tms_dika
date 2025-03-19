@@ -13,7 +13,7 @@
                 <!-- Upload CSV -->
                 <div class="panel bg-gradient-to-r from-cyan-500 to-cyan-400">
                     <div class="flex justify-between">
-                        <div class="text-md font-semibold ltr:mr-1 rtl:ml-1">Upload CSV</div>
+                        <div class="text-md font-semibold ltr:mr-1 rtl:ml-1">Upload Data</div>
                         <div class="dropdown">
                             <client-only>
                                 <Popper :placement="store.rtlClass === 'rtl' ? 'bottom-start' : 'bottom-end'" offsetDistance="0" class="align-middle">
@@ -23,10 +23,10 @@
                                     <template #content="{ close }">
                                         <ul @click="close()" class="text-black dark:text-white-dark">
                                             <!-- <li>
-                                                <a href="#" @click="toggleHistori">{{ isHistoryVisible ? 'Hidden History' : 'History Proses' }}</a>
+                                                <a href="#" @click="toggleHistori">{{ isHistoryVisible ? 'Hide History' : 'History Proses' }}</a>
                                             </li> -->
                                             <li>
-                                                <a href="#" @click="toggleUpload">{{ isUploadVisible ? 'Hidden Proses' : 'Proses Data' }}</a>
+                                                <a href="#" @click="toggleUpload">{{ isUploadVisible ? 'Hide Upload' : 'Upload Data' }}</a>
                                             </li>                                            
                                         </ul>
                                     </template>
@@ -56,10 +56,10 @@
                                     <template #content="{ close }">
                                         <ul @click="close()" class="text-black dark:text-white-dark">
                                             <li>
-                                                <a href="#" @click="toggleMerged">{{ isMergedVisible ? 'Hidden Result' : 'Hasil Sinkron' }}</a>
+                                                <a href="#" @click="toggleMerged">{{ isMergedVisible ? 'Hide Result' : 'Hasil Sinkron' }}</a>
                                             </li>
                                             <li>
-                                                <a href="#" @click="toggleSinkronisasi">{{ isSinkronisasiVisible ? 'Hidden Sinkron' : 'Proses Sinkron' }}</a>
+                                                <a href="#" @click="toggleSinkronisasi">{{ isSinkronisasiVisible ? 'Hide Sinkron' : 'Proses Sinkron' }}</a>
                                             </li>
                                         </ul>
                                     </template>
@@ -89,7 +89,7 @@
                                     <template #content="{ close }">
                                         <ul @click="close()" class="text-black dark:text-white-dark">
                                             <li>
-                                                <a href="#" @click="toggleGrafik">{{ isGrafikVisible ? 'Hidden Grafik' : 'View Grafik' }}</a>
+                                                <a href="#" @click="toggleGrafik">{{ isGrafikVisible ? 'Hide Grafik' : 'View Grafik' }}</a>
                                             </li>
                                             
                                         </ul>
@@ -109,7 +109,7 @@
                 </div>
                 <div class="panel bg-gradient-to-r from-fuchsia-500 to-fuchsia-400">
                     <div class="flex justify-between">
-                        <div class="text-md font-semibold ltr:mr-1 rtl:ml-1">History CSV Upload</div>
+                        <div class="text-md font-semibold ltr:mr-1 rtl:ml-1">History Data</div>
                         <div class="dropdown">
                             <client-only>
                                 <Popper :placement="store.rtlClass === 'rtl' ? 'bottom-start' : 'bottom-end'" offsetDistance="0" class="align-middle">
@@ -119,7 +119,7 @@
                                     <template #content="{ close }">
                                         <ul @click="close()" class="text-black dark:text-white-dark">
                                             <li>
-                                                <a href="#" @click="toggleHistori">{{ isHistoryVisible ? 'Hidden History' : 'History Upload' }}</a>
+                                                <a href="#" @click="toggleHistori">{{ isHistoryVisible ? 'Hide Data' : 'History Data' }}</a>
                                             </li>                                            
                                         </ul>
                                     </template>
@@ -161,6 +161,9 @@ import grafik from './grafik.vue';
 
 const store = useAppStore();
 useHead({ title: 'Proses Data' });
+definePageMeta({
+    middleware: 'auth'
+});
 
 // State untuk mengontrol visibilitas upload CSV
 const isUploadVisible = ref(false);

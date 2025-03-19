@@ -19,181 +19,126 @@
                     <div
                         class="absolute inset-y-0 w-8 from-primary/10 via-transparent to-transparent ltr:-right-10 ltr:bg-gradient-to-r rtl:-left-10 rtl:bg-gradient-to-l xl:w-16 ltr:xl:-right-20 rtl:xl:-left-20"
                     ></div>
-                    <div class="ltr:xl:-skew-x-[14deg] rtl:xl:skew-x-[14deg]">
-                        <NuxtLink to="/" class="ms-10 block w-48 lg:w-72">
-                            <img src="/assets/images/auth/logo-white.svg" alt="Logo" class="w-full" />
-                        </NuxtLink>
-                        <div class="mt-24 hidden w-full max-w-[430px] lg:block">
+                    <div class="ltr:xl:-skew-x-[14deg] rtl:xl:skew-x-[14deg]">                       
+                        <div class="hidden w-full max-w-[500px] lg:block">
                             <img src="/assets/images/auth/register.svg" alt="Cover Image" class="w-full" />
                         </div>
                     </div>
                 </div>
                 <div class="relative flex w-full flex-col items-center justify-center gap-6 px-4 pb-16 pt-6 sm:px-6 lg:max-w-[667px]">
-                    <div class="flex w-full max-w-[440px] items-center gap-2 lg:absolute lg:end-6 lg:top-6 lg:max-w-full">
-                        <NuxtLink to="/" class="block w-8 lg:hidden">
-                            <img src="/assets/images/logo.svg" alt="Logo" class="mx-auto w-10" />
-                        </NuxtLink>
-                        <div class="dropdown ms-auto w-max">
-                            <client-only>
-                                <Popper :placement="store.rtlClass === 'rtl' ? 'bottom-start' : 'bottom-end'" offsetDistance="8">
-                                    <button
-                                        type="button"
-                                        class="flex items-center gap-2.5 rounded-lg border border-white-dark/30 bg-white px-2 py-1.5 text-white-dark hover:border-primary hover:text-primary dark:bg-black"
-                                    >
-                                        <div>
-                                            <img :src="currentFlag" alt="image" class="h-5 w-5 rounded-full object-cover" />
-                                        </div>
-                                        <div class="text-base font-bold uppercase">{{ store.locale }}</div>
-                                        <span class="shrink-0">
-                                            <icon-caret-down />
-                                        </span>
-                                    </button>
-                                    <template #content="{ close }">
-                                        <ul
-                                            class="grid w-[280px] grid-cols-2 gap-2 !px-2 font-semibold text-dark dark:text-white-dark dark:text-white-light/90"
-                                        >
-                                            <template v-for="item in store.languageList" :key="item.code">
-                                                <li>
-                                                    <button
-                                                        type="button"
-                                                        class="w-full hover:text-primary"
-                                                        :class="{ 'bg-primary/10 text-primary': store.locale === item.code }"
-                                                        @click="changeLanguage(item), close()"
-                                                    >
-                                                        <img
-                                                            class="h-5 w-5 rounded-full object-cover"
-                                                            :src="`/assets/images/flags/${item.code.toUpperCase()}.svg`"
-                                                            alt=""
-                                                        />
-                                                        <span class="ltr:ml-3 rtl:mr-3">{{ item.name }}</span>
-                                                    </button>
-                                                </li>
-                                            </template>
-                                        </ul>
-                                    </template>
-                                </Popper>
-                            </client-only>
-                        </div>
-                    </div>
-                    <div class="w-full max-w-[440px] lg:mt-16">
+                    <div class="w-full max-w-[440px] lg:mt-10">
                         <div class="mb-10">
                             <h1 class="text-3xl font-extrabold uppercase !leading-snug text-primary md:text-4xl">Sign Up</h1>
-                            <p class="text-base font-bold leading-normal text-white-dark">Enter your email and password to register</p>
+                            <p class="text-base font-bold leading-normal text-white-dark">Enter your username and password to register</p>
                         </div>
-                        <form class="space-y-5 dark:text-white" @submit.prevent="router.push('/')">
+                        <form class="space-y-5 dark:text-white" @submit.prevent="handleSubmit">
                             <div>
-                                <label for="Name">Name</label>
+                                <label for="Username">Username</label>
                                 <div class="relative text-white-dark">
-                                    <input id="Name" type="text" placeholder="Enter Name" class="form-input ps-10 placeholder:text-white-dark" />
+                                    <input 
+                                        id="Username" 
+                                        type="text" 
+                                        v-model="formData.username"
+                                        placeholder="Enter Username" 
+                                        class="form-input ps-10 placeholder:text-white-dark" 
+                                    />
                                     <span class="absolute start-4 top-1/2 -translate-y-1/2">
                                         <icon-user :fill="true" />
                                     </span>
                                 </div>
-                            </div>
-                            <div>
-                                <label for="Email">Email</label>
-                                <div class="relative text-white-dark">
-                                    <input id="Email" type="email" placeholder="Enter Email" class="form-input ps-10 placeholder:text-white-dark" />
-                                    <span class="absolute start-4 top-1/2 -translate-y-1/2">
-                                        <icon-mail :fill="true" />
-                                    </span>
-                                </div>
-                            </div>
+                            </div>                            
                             <div>
                                 <label for="Password">Password</label>
                                 <div class="relative text-white-dark">
-                                    <input id="Password" type="password" placeholder="Enter Password" class="form-input ps-10 placeholder:text-white-dark" />
+                                    <input 
+                                        id="Password" 
+                                        type="password" 
+                                        v-model="formData.password"
+                                        placeholder="Enter Password" 
+                                        class="form-input ps-10 placeholder:text-white-dark" 
+                                    />
                                     <span class="absolute start-4 top-1/2 -translate-y-1/2">
                                         <icon-lock-dots :fill="true" />
                                     </span>
                                 </div>
                             </div>
                             <div>
-                                <label class="flex cursor-pointer items-center">
-                                    <input type="checkbox" class="form-checkbox bg-white dark:bg-black" />
-                                    <span class="text-white-dark">Subscribe to weekly newsletter</span>
-                                </label>
-                            </div>
+                                <label for="Role">Role</label>
+                                <div class="relative text-white-dark">
+                                    <select 
+                                        id="Role" 
+                                        v-model="formData.role"
+                                        class="form-select ps-10 placeholder:text-white-dark"
+                                    >
+                                        <option value="user">User</option>
+                                        <option value="admin">Admin</option>
+                                    </select>
+                                </div>
+                            </div>                           
                             <button type="submit" class="btn btn-gradient !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
                                 Sign Up
                             </button>
                         </form>
-
-                        <div class="relative my-7 text-center md:mb-9">
-                            <span class="absolute inset-x-0 top-1/2 h-px w-full -translate-y-1/2 bg-white-light dark:bg-white-dark"></span>
-                            <span class="relative bg-white px-2 font-bold uppercase text-white-dark dark:bg-dark dark:text-white-light">or</span>
-                        </div>
-                        <div class="mb-10 md:mb-[60px]">
-                            <ul class="flex justify-center gap-3.5">
-                                <li>
-                                    <a
-                                        href="javascript:"
-                                        class="inline-flex h-8 w-8 items-center justify-center rounded-full p-0 transition hover:scale-110"
-                                        style="background: linear-gradient(135deg, rgba(239, 18, 98, 1) 0%, rgba(67, 97, 238, 1) 100%)"
-                                    >
-                                        <icon-instagram />
-                                    </a>
-                                </li>
-                                <li>
-                                    <a
-                                        href="javascript:"
-                                        class="inline-flex h-8 w-8 items-center justify-center rounded-full p-0 transition hover:scale-110"
-                                        style="background: linear-gradient(135deg, rgba(239, 18, 98, 1) 0%, rgba(67, 97, 238, 1) 100%)"
-                                    >
-                                        <icon-facebook-circle />
-                                    </a>
-                                </li>
-                                <li>
-                                    <a
-                                        href="javascript:"
-                                        class="inline-flex h-8 w-8 items-center justify-center rounded-full p-0 transition hover:scale-110"
-                                        style="background: linear-gradient(135deg, rgba(239, 18, 98, 1) 0%, rgba(67, 97, 238, 1) 100%)"
-                                    >
-                                        <icon-twitter :fill="true" />
-                                    </a>
-                                </li>
-                                <li>
-                                    <a
-                                        href="javascript:"
-                                        class="inline-flex h-8 w-8 items-center justify-center rounded-full p-0 transition hover:scale-110"
-                                        style="background: linear-gradient(135deg, rgba(239, 18, 98, 1) 0%, rgba(67, 97, 238, 1) 100%)"
-                                    >
-                                        <icon-google />
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="text-center dark:text-white">
-                            Already have an account ?
-                            <NuxtLink to="/auth/cover-login" class="uppercase text-primary underline transition hover:text-black dark:hover:text-white">
-                                SIGN IN
-                            </NuxtLink>
-                        </div>
                     </div>
-                    <p class="absolute bottom-6 w-full text-center dark:text-white">© {{ new Date().getFullYear() }}.VRISTO All Rights Reserved.</p>
+                    <p class="absolute bottom-6 w-full text-center dark:text-white">© {{ new Date().getFullYear() }}.DIKA All Rights Reserved.</p>
                 </div>
             </div>
         </div>
     </div>
 </template>
-<script lang="ts" setup>
-    import { computed } from 'vue';
-    import appSetting from '@/app-setting';
-    import { useAppStore } from '@/stores/index';
-    import { useRouter } from 'vue-router';
-    useHead({ title: 'Register Cover' });
-    const router = useRouter();
-    definePageMeta({
-        layout: 'auth-layout',
-    });
-    const store = useAppStore();
-    const { setLocale } = useI18n();
 
-    // multi language
-    const changeLanguage = (item: any) => {
-        appSetting.toggleLanguage(item, setLocale);
-    };
-    const currentFlag = computed(() => {
-        return `/assets/images/flags/${store.locale?.toUpperCase()}.svg`;
-    });
+<script lang="ts" setup>
+import { ref } from 'vue';
+import Swal from 'sweetalert2';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+const formData = ref({
+    username: '',
+    password: '',
+    role: 'user'
+});
+
+const handleSubmit = async () => {
+    try {
+        const response = await fetch('/api/auth/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData.value),
+        });
+
+        const data = await response.json();
+
+        if (data.status === 200) {
+            await Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: 'Registration successful!',
+                timer: 1500,
+                showConfirmButton: false
+            });
+            router.push('/auth/cover-login');
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: data.message,
+            });
+        }
+    } catch (error) {
+        console.error('Registration error:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: 'An error occurred during registration',
+        });
+    }
+};
+
+definePageMeta({
+    layout: 'auth-layout',
+});
 </script>

@@ -82,6 +82,10 @@ import { ref, computed, onMounted } from 'vue';
 import { useAppStore } from '@/stores/index';
 import { useFetch } from '#app';
 
+definePageMeta({
+    middleware: 'auth'
+});
+
 const store = useAppStore();
 const totalBaseAmount = ref(0);
 const totalTarif = ref(0);

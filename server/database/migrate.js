@@ -23,6 +23,15 @@ async function migrate() {
     `);
 
     await connection.execute(`
+      CREATE TABLE IF NOT EXISTS users (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      username VARCHAR(255) NOT NULL DEFAULT 'user',
+      password VARCHAR(255) NOT NULL DEFAULT 'password',
+      status BOOLEAN DEFAULT FALSE
+      )
+    `);
+
+    await connection.execute(`
       CREATE TABLE IF NOT EXISTS csv_upload_header (
         id INT AUTO_INCREMENT PRIMARY KEY,
         upload_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

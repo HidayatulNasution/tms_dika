@@ -73,6 +73,10 @@
   import { ref, onMounted } from 'vue';
   import Swal from 'sweetalert2';
   import Vue3Datatable from '@bhplugin/vue3-datatable';
+
+  definePageMeta({
+    middleware: 'auth'
+});
   
   const search1 = ref('');
   const matchedRows = ref([]);

@@ -23,47 +23,8 @@
                         }"
                         class="relative h-[calc(100vh-80px)]"
                     >
-                        <ul class="relative space-y-0.5 p-4 py-0 font-semibold">
-                            <!-- <li class="menu nav-item">
-                                <button
-                                    type="button"
-                                    class="nav-link group w-full"
-                                    :class="{ active: activeDropdown === 'dashboard' }"
-                                    @click="activeDropdown === 'dashboard' ? (activeDropdown = null) : (activeDropdown = 'dashboard')"
-                                >
-                                    <div class="flex items-center">
-                                        <icon-menu-dashboard class="shrink-0 group-hover:!text-primary" />
-                                        <span class="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">
-                                            {{ $t('dashboard') }}
-                                        </span>
-                                    </div>
-                                    <div :class="{ '-rotate-90 rtl:rotate-90': activeDropdown !== 'dashboard' }">
-                                        <icon-caret-down />
-                                    </div>
-                                </button>
-                                <vue-collapsible :isOpen="activeDropdown === 'dashboard'">
-                                    <ul class="sub-menu text-gray-500">
-                                        <li>
-                                            <NuxtLink to="/" @click="toggleMobileMenu">{{ $t('sales') }}</NuxtLink>
-                                        </li>
-                                        <li>
-                                            <NuxtLink to="/analytics" @click="toggleMobileMenu">{{ $t('analytics') }}</NuxtLink>
-                                        </li>
-                                        <li>
-                                            <NuxtLink to="/finance" @click="toggleMobileMenu">{{ $t('finance') }}</NuxtLink>
-                                        </li>
-                                        <li>
-                                            <NuxtLink to="/crypto" @click="toggleMobileMenu">{{ $t('crypto') }}</NuxtLink>
-                                        </li>
-                                    </ul>
-                                </vue-collapsible>
-                            </li>                    -->
+                        <ul class="relative space-y-0.5 p-4 py-0 font-semibold">                      
                             
-                            <!-- <h2 class="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
-                                <icon-minus class="hidden h-5 w-4 flex-none" />
-                                <span>{{ $t('tables_and_forms') }}</span>
-                            </h2> -->
-
                             <li class="menu nav-item">
                                 <button
                                     type="button"
@@ -83,38 +44,19 @@
                                     </div>
                                 </button>
                                 <vue-collapsible :isOpen="activeDropdown === 'datatables'">
-                                    <ul class="sub-menu text-gray-500">
-                                     
-                                         <!-- <li>
-                                            <NuxtLink to="/datatables/multiple-tables" @click="toggleMobileMenu">{{ $t('multiple_tables') }}</NuxtLink>
-                                        </li> -->
-
+                                    <ul class="sub-menu text-gray-500">                                  
                                         <li>
                                             <NuxtLink to="/datatables/data-dika" @click="toggleMobileMenu">{{ $t('data-dika') }}</NuxtLink>
-                                        </li> 
-                                     
-                                        <!-- <li>
-                                            <NuxtLink to="/datatables/range-search" @click="toggleMobileMenu">{{ $t('range_search') }}</NuxtLink>
-                                        </li> -->
-                                        <!-- <li>
-                                            <NuxtLink to="/datatables/export" @click="toggleMobileMenu">{{ $t('export') }}</NuxtLink>
-                                        </li> -->
+                                        </li>                                      
                                         <li>
                                             <NuxtLink to="/datatables/proses-data" @click="toggleMobileMenu">{{ $t('proses-data') }}</NuxtLink>
                                         </li>
-                                    
                                     </ul>
                                 </vue-collapsible>
                             </li>
-
                             
-
-                            <!-- <h2 class="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
-                                <icon-minus class="hidden h-5 w-4 flex-none" />
-                                <span>{{ $t('user_and_pages') }}</span>
-                            </h2> -->
-
-                            <!-- <li class="menu nav-item">
+                            <!-- Show users menu only for admin role -->
+                            <li v-if="store.userRole === 'admin'" class="menu nav-item">
                                 <button
                                     type="button"
                                     class="nav-link group w-full"
@@ -123,7 +65,6 @@
                                 >
                                     <div class="flex items-center">
                                         <icon-menu-users class="shrink-0 group-hover:!text-primary" />
-
                                         <span class="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">{{ $t('users') }}</span>
                                     </div>
                                     <div :class="{ '-rotate-90 rtl:rotate-90': activeDropdown !== 'users' }">
@@ -133,56 +74,53 @@
                                 <vue-collapsible :isOpen="activeDropdown === 'users'">
                                     <ul class="sub-menu text-gray-500">
                                         <li>
-                                            <NuxtLink to="/users/profile" @click="toggleMobileMenu">{{ $t('profile') }}</NuxtLink>
-                                        </li>
-                                        <li>
-                                            <NuxtLink to="/users/user-account-settings" @click="toggleMobileMenu">{{ $t('account_settings') }}</NuxtLink>
+                                            <NuxtLink to="/users/user" @click="toggleMobileMenu">{{ $t('user') }}</NuxtLink>
                                         </li>
                                     </ul>
                                 </vue-collapsible>
-                            </li>                       -->
+                            </li>                      
                                                       
                         </ul>
                     </perfect-scrollbar>
-                </client-only>
-            </div>
+                </client-only>               
+            </div>        
         </nav>
     </div>
 </template>
 
 <script lang="ts" setup>
-    import { ref, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
+import { useAppStore } from '@/stores/index';
+import VueCollapsible from 'vue-height-collapsible/vue3';
 
-    import { useAppStore } from '@/stores/index';
-    import VueCollapsible from 'vue-height-collapsible/vue3';
-    const store = useAppStore();
-    const activeDropdown: any = ref('');
-    const subActive: any = ref('');
+const store = useAppStore();
+const activeDropdown: any = ref('');
+const subActive: any = ref('');
 
-    onMounted(() => {
-        setTimeout(() => {
-            const selector = document.querySelector('.sidebar ul a[href="' + window.location.pathname + '"]');
+onMounted(() => {
+    setTimeout(() => {
+        const selector = document.querySelector('.sidebar ul a[href="' + window.location.pathname + '"]');
 
-            if (selector) {
-                selector.classList.add('active');
-                const ul: any = selector.closest('ul.sub-menu');
-                if (ul) {
-                    let ele: any = ul.closest('li.menu').querySelectorAll('.nav-link') || [];
+        if (selector) {
+            selector.classList.add('active');
+            const ul: any = selector.closest('ul.sub-menu');
+            if (ul) {
+                let ele: any = ul.closest('li.menu').querySelectorAll('.nav-link') || [];
 
-                    if (ele.length) {
-                        ele = ele[0];
-                        setTimeout(() => {
-                            ele.click();
-                        });
-                    }
+                if (ele.length) {
+                    ele = ele[0];
+                    setTimeout(() => {
+                        ele.click();
+                    });
                 }
             }
-        });
-    });
-
-    const toggleMobileMenu = () => {
-        if (window.innerWidth < 1024) {
-            store.toggleSidebar();
         }
-    };
+    });
+});
+
+const toggleMobileMenu = () => {
+    if (window.innerWidth < 1024) {
+        store.toggleSidebar();
+    }
+};      
 </script>

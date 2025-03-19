@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import appSetting from '@/app-setting';
+
 export const useAppStore = defineStore('app', {
     state: () => ({
         isDarkMode: false,
@@ -12,6 +13,7 @@ export const useAppStore = defineStore('app', {
         navbar: 'navbar-sticky',
         locale: 'en',
         sidebar: false,
+        userRole: '', // Add user role state
         languageList: [
             { code: 'zh', name: 'Chinese' },
             { code: 'da', name: 'Danish' },
@@ -32,12 +34,31 @@ export const useAppStore = defineStore('app', {
         ],
         isShowMainLoader: true,
         semidark: false,
+        menu: false,
     }),
 
     actions: {
+        setUserRole(role: string) {
+            this.userRole = role;
+            localStorage.setItem('userRole', role); // Persist role in localStorage
+        },
+
+        initializeUserRole() {
+            const savedRole = localStorage.getItem('userRole');
+            if (savedRole) {
+                this.userRole = savedRole;
+            }
+        },
+
+        clearUserRole() {
+            this.userRole = '';
+            localStorage.removeItem('userRole');
+        },
+
         setMainLayout(payload: any = null) {
             this.mainLayout = payload; //app , auth
         },
+
         toggleTheme(payload: any = null) {
             payload = payload || this.theme; // light|dark|system
             localStorage.setItem('theme', payload);
@@ -60,23 +81,27 @@ export const useAppStore = defineStore('app', {
                 document.querySelector('body')?.classList.remove('dark');
             }
         },
+
         toggleMenu(payload: any = null) {
             payload = payload || this.menu; // vertical, collapsible-vertical, horizontal
             this.sidebar = false; // reset sidebar state
             localStorage.setItem('menu', payload);
             this.menu = payload;
         },
+
         toggleLayout(payload: any = null) {
             payload = payload || this.layout; // full, boxed-layout
             localStorage.setItem('layout', payload);
             this.layout = payload;
         },
+
         toggleRTL(payload: any = null) {
             payload = payload || this.rtlClass; // rtl, ltr
             localStorage.setItem('rtlClass', payload);
             this.rtlClass = payload;
             document.querySelector('html')?.setAttribute('dir', this.rtlClass || 'ltr');
         },
+
         toggleAnimation(payload: any = null) {
             payload = payload || this.animation; // animate__fadeIn, animate__fadeInDown, animate__fadeInUp, animate__fadeInLeft, animate__fadeInRight, animate__slideInDown, animate__slideInLeft, animate__slideInRight, animate__zoomIn
             payload = payload?.trim();
@@ -84,16 +109,19 @@ export const useAppStore = defineStore('app', {
             this.animation = payload;
             appSetting.changeAnimation();
         },
+
         toggleNavbar(payload: any = null) {
             payload = payload || this.navbar; // navbar-sticky, navbar-floating, navbar-static
             localStorage.setItem('navbar', payload);
             this.navbar = payload;
         },
+
         toggleSemidark(payload: any = null) {
             payload = payload || false;
             localStorage.setItem('semidark', payload);
             this.semidark = payload;
         },
+
         toggleLocale(payload: any = null, setLocale: any) {
             payload = payload || this.locale;
             localStorage.setItem('i18n_locale', payload);
@@ -101,13 +129,15 @@ export const useAppStore = defineStore('app', {
             setLocale(payload);
             if(this.locale?.toLowerCase() === 'ae') {
                 this.toggleRTL('rtl');
-            }else {
+            } else {
                 this.toggleRTL('ltr');
             }
         },
+
         toggleSidebar(state: boolean = false) {
             this.sidebar = !this.sidebar;
         },
+
         toggleMainLoader(state: boolean = false) {
             this.isShowMainLoader = true;
             setTimeout(() => {
@@ -115,5 +145,7 @@ export const useAppStore = defineStore('app', {
             }, 500);
         },
     },
-    getters: {},
+    getters: {
+        isAdmin: (state) => state.userRole === 'admin',
+    },
 });

@@ -150,6 +150,9 @@ import JsonExcel from 'vue-json-excel3';
 import * as XLSX from 'xlsx';
 
 useHead({ title: 'History Data' });
+definePageMeta({
+    middleware: 'auth'
+});
 
 // State management
 const search1 = ref('');

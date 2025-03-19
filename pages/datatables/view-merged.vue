@@ -54,6 +54,9 @@ import { ref, onMounted, watch } from 'vue';
   import Vue3Datatable from '@bhplugin/vue3-datatable';
 
   useHead({ title: 'View Data' });
+  definePageMeta({
+    middleware: 'auth'
+});
   const search1 = ref('');
   const merged = ref([]);
 

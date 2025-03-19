@@ -70,6 +70,9 @@ export default defineNuxtConfig({
     },
 
     runtimeConfig: {
+        private: {
+            JWT_SECRET_KEY: process.env.JWT_SECRET_KEY, // Akses secret key dari .env
+          },
         // Database 1
         dbHost: process.env.DB_HOST,
         dbPort: process.env.DB_PORT,
@@ -95,7 +98,12 @@ export default defineNuxtConfig({
 
     compatibilityDate: '2024-09-21',
     devtools: { enabled: false },
+    // Tambahkan konfigurasi untuk middleware (opsional)
+    routeRules: {
+        '/users/**': { middleware: 'auth' }, // Contoh: Terapkan middleware 'auth' ke semua rute di bawah /users
+    },
     nitro: {
     preset: 'node-server'
   }
+
 });
