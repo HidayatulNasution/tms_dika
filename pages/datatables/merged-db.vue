@@ -6,7 +6,7 @@
         <input v-model="search1" type="text" class="form-input w-auto" placeholder="🔍 Search" autofocus="on" />
         <button @click="saveToDatabase" class="btn btn-primary">
           <icon-save class="w-5 h-5 ltr:mr-2 rtl:ml-2" />
-          Save to Database
+          Save
         </button>
       </div>
     </div>
@@ -78,9 +78,11 @@
     middleware: 'auth'
 });
   
-  const search1 = ref('');
-  const matchedRows = ref([]);
-  const unmatchedRows = ref([]);
+const search1 = ref('');
+const matchedRows = ref([]);
+const unmatchedRows = ref([]);
+const matchedTable = ref(null);
+const unmatchedTable = ref(null);
   
   // Fetch data dari API
   const fetchSinkronisasi = async () => {
@@ -102,6 +104,46 @@
   };
   
   onMounted(fetchSinkronisasi);
+
+  // Fungsi untuk animasi dan reset data
+const animateAndReset = () => {
+  // Animasi untuk matched table
+  if (matchedTable.value && matchedTable.value.$el) {
+    const tableElement = matchedTable.value.$el.querySelector('table');
+    if (tableElement) {
+      tableElement.classList.add('rotate-out');
+    }
+  }
+
+  // Animasi untuk unmatched table
+  if (unmatchedTable.value && unmatchedTable.value.$el) {
+    const tableElement = unmatchedTable.value.$el.querySelector('table');
+    if (tableElement) {
+      tableElement.classList.add('rotate-out');
+    }
+  }
+
+  // Setelah animasi selesai, kosongkan data dan hapus class animasi
+  setTimeout(() => {
+    matchedRows.value = [];
+    unmatchedRows.value = [];
+    
+    // Hapus class animasi
+    if (matchedTable.value && matchedTable.value.$el) {
+      const tableElement = matchedTable.value.$el.querySelector('table');
+      if (tableElement) {
+        tableElement.classList.remove('rotate-out');
+      }
+    }
+    
+    if (unmatchedTable.value && unmatchedTable.value.$el) {
+      const tableElement = unmatchedTable.value.$el.querySelector('table');
+      if (tableElement) {
+        tableElement.classList.remove('rotate-out');
+      }
+    }
+  }, 500);
+};
   
   // Fungsi untuk menyimpan data ke database dengan SweetAlert2
   const saveToDatabase = async () => {
@@ -138,11 +180,14 @@
         Swal.fire({
           title: "Success!",
           text: "Your data has been saved.",
-          icon: "success"
+          icon: "success",
+          timer: 2000,
+          showConfirmButton: false
         })
         .then(() => {
-          window.location.reload();
-        });
+        animateAndReset();
+      });
+
       } else {
         Swal.fire({
           title: "Error!",
@@ -207,3 +252,21 @@
     return color[random];
   };
   </script>
+
+<style scoped>
+/* Animasi Rotate Out */
+.rotate-out {
+  animation: rotateOut 0.5s ease-in-out forwards;
+}
+
+@keyframes rotateOut {
+  from {
+    transform: rotateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: rotateY(180deg);
+    opacity: 0;
+  }
+}
+</style>

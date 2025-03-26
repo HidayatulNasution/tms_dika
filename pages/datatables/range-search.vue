@@ -120,7 +120,6 @@ const saveToDatabase = async () => {
             confirmButton: "btn btn-success px-4 py-2",
             cancelButton: "btn btn-danger px-4 py-2",
             actions: "d-flex justify-content-center gap-3"
-           
         },
         buttonsStyling: false
     });
@@ -137,34 +136,73 @@ const saveToDatabase = async () => {
     });
 
     if (result.isConfirmed) {
-        // Filter data lagi sebelum dikirim ke server
-        const validData = csvData.value.filter((row) => {
-            return row.t_id && row.tanggal && row.user && row.status && row.tarif && row.pembayaran && row.lokasi && row.kendaraan && row.uji_emisi;
-        });
+        try {
+            // Tampilkan animasi loading
+            Swal.fire({
+                title: "Saving...",
+                text: "Please wait while we save your data.",
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                willOpen: () => {
+                    Swal.showLoading(); // Menampilkan indikator loading
+                }
+            });
 
-        // Kirim data ke API
-        const response = await fetch("/api/save-csv", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(validData),
-        });
+            // Filter data sebelum dikirim ke server
+            const validData = csvData.value.filter((row) => {
+                return row.t_id && row.tanggal && row.user && row.status && row.tarif && row.pembayaran && row.lokasi && row.kendaraan && row.uji_emisi;
+            });
 
-        const result = await response.json();
+            // Kirim data ke API
+            const response = await fetch("/api/save-csv", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(validData),
+            });
 
-        // Tampilkan notifikasi sukses
-        swalWithBootstrapButtons.fire({
-            title: "Saved!",
-            text: "Your file has been saved successfully.",
-            icon: "success",
-            timer: 2000, // Menutup otomatis setelah 2 detik
-            showConfirmButton: false // Hilangkan tombol OK
-        })
-        .then(() => {
-            window.location.reload(); // Muat ulang halaman
-        });        
+            const result = await response.json();
+
+            // Tutup animasi loading
+            Swal.close();
+
+            // Tampilkan notifikasi sukses
+            await swalWithBootstrapButtons.fire({
+                title: "Saved!",
+                text: "Your file has been saved successfully.",
+                icon: "success",
+                timer: 2000, // Menutup otomatis setelah 2 detik
+                showConfirmButton: false // Hilangkan tombol OK
+            });
+
+            // Jalankan animasi rotate-out
+            const tableElement = document.querySelector('table');
+            if (tableElement) {
+                tableElement.classList.add('rotate-out');
+
+                // Setelah animasi selesai, kosongkan data dan hapus class animasi
+                setTimeout(() => {
+                    csvData.value = [];
+                    headers.value = [];
+                    tableElement.classList.remove('rotate-out');
+                }, 500); // Sesuaikan dengan durasi animasi
+            }
+        } catch (error) {
+            // Tangani error jika terjadi kesalahan saat menyimpan data
+            console.error("Error saving data:", error);
+
+            // Tutup animasi loading
+            Swal.close();
+
+            // Tampilkan notifikasi error
+            await swalWithBootstrapButtons.fire({
+                title: "Error!",
+                text: "Failed to save the data. Please try again.",
+                icon: "error"
+            });
+        }
     } else if (result.dismiss === Swal.DismissReason.cancel) {
         // Tampilkan notifikasi pembatalan
-        swalWithBootstrapButtons.fire({
+        await swalWithBootstrapButtons.fire({
             title: "Cancelled",
             text: "Changes are not saved :)",
             icon: "info"
@@ -172,3 +210,21 @@ const saveToDatabase = async () => {
     }
 };
 </script>
+
+<style scoped>
+/* Animasi rotate out */
+.rotate-out {
+    animation: rotateOut 0.5s ease-in-out forwards;
+}
+
+@keyframes rotateOut {
+    from {
+        transform: rotateY(0);
+        opacity: 1;
+    }
+    to {
+        transform: rotateY(180deg);
+        opacity: 0;
+    }
+}
+</style>
