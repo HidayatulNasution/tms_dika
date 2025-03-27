@@ -8,15 +8,14 @@ async function migrate() {
     await connection.execute(`
       CREATE TABLE IF NOT EXISTS csv_transactions (
         id INT AUTO_INCREMENT PRIMARY KEY,
-        t_id VARCHAR(255) UNIQUE NOT NULL DEFAULT 't_id tidak boleh kosong',
-        tanggal VARCHAR(255) NOT NULL DEFAULT 'tanggal tidak boleh kosong',
+        t_id VARCHAR(255) UNIQUE NOT NULL DEFAULT 't_id tidak boleh kosong',        
         user VARCHAR(255) NOT NULL DEFAULT 'user tidak boleh kosong',
         status VARCHAR(255) NOT NULL DEFAULT 'status tidak boleh kosong',
         tarif VARCHAR(255) NOT NULL DEFAULT 'tarif tidak boleh kosong',
         pembayaran VARCHAR(255) NOT NULL DEFAULT 'pembayaran tidak boleh kosong',
         lokasi VARCHAR(255) NOT NULL DEFAULT 'lokasi tidak boleh kosong',
         kendaraan VARCHAR(255) NOT NULL DEFAULT 'kendaraan tidak boleh kosong',
-        uji_emisi VARCHAR(255) NOT NULL DEFAULT 'uji emisi tidak boleh kosong',
+        tanggal VARCHAR(255) NOT NULL DEFAULT 'tanggal tidak boleh kosong',
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
       )
@@ -47,15 +46,14 @@ async function migrate() {
       CREATE TABLE IF NOT EXISTS csv_upload_detail (
         id INT AUTO_INCREMENT PRIMARY KEY,
         header_id INT NOT NULL,
-        t_id VARCHAR(255) UNIQUE NOT NULL DEFAULT 't_id tidak boleh kosong',
-        tanggal VARCHAR(255) NOT NULL DEFAULT 'tanggal tidak boleh kosong',
+        t_id VARCHAR(255) UNIQUE NOT NULL DEFAULT 't_id tidak boleh kosong',        
         user VARCHAR(255) NOT NULL DEFAULT 'user tidak boleh kosong',
         status VARCHAR(255) NOT NULL DEFAULT 'status tidak boleh kosong',
         tarif VARCHAR(255) NOT NULL DEFAULT 'tarif tidak boleh kosong',
         pembayaran VARCHAR(255) NOT NULL DEFAULT 'pembayaran tidak boleh kosong',
         lokasi VARCHAR(255) NOT NULL DEFAULT 'lokasi tidak boleh kosong',
         kendaraan VARCHAR(255) NOT NULL DEFAULT 'kendaraan tidak boleh kosong',
-        uji_emisi VARCHAR(255) NOT NULL DEFAULT 'uji emisi tidak boleh kosong',
+        tanggal VARCHAR(255) NOT NULL DEFAULT 'tanggal tidak boleh kosong',
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         INDEX header_id (header_id ASC),

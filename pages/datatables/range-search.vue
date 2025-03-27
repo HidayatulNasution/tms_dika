@@ -83,22 +83,27 @@ const handleFileUpload = async () => {
             popup: "custom-swal-popup", // Opsional: Untuk styling kustom
         }
     });
-
     if (file) {
         const reader = new FileReader();
-
         reader.onload = (e) => {
             const csvText = e.target.result;
             const parsed = Papa.parse(csvText, { header: true });
-
-            // Filter data untuk menghapus baris kosong atau tidak valid
-            const filteredData = parsed.data.filter((row) => {
-                return row.t_id && row.tanggal && row.user && row.status && row.tarif && row.pembayaran && row.lokasi && row.kendaraan && row.uji_emisi;
-            });
-
-            headers.value = parsed.meta.fields; // Ambil header CSV
+            // Hilangkan kolom pertama yang kosong
+            const filteredData = parsed.data
+                .map((row) => {
+                    // Hapus kolom pertama yang kosong
+                    const keys = Object.keys(row);
+                    if (keys[0] === "") {
+                        delete row[keys[0]];
+                    }
+                    return row;
+                })
+                .filter((row) => {
+                    // Filter hanya baris dengan t_id yang valid
+                    return row.t_id && row.user && row.status && row.tarif && row.pembayaran && row.lokasi && row.kendaraan && row.tanggal;
+                });
+            headers.value = parsed.meta.fields.filter((header) => header !== ""); // Hilangkan header kosong
             csvData.value = filteredData; // Ambil data CSV yang valid
-
             // Tampilkan notifikasi sukses
             Swal.fire({
                 icon: "success",
@@ -107,10 +112,10 @@ const handleFileUpload = async () => {
                 confirmButtonText: "OK"
             });
         };
-
         reader.readAsText(file); // Baca file sebagai teks
     }
 };
+
 
 // Simpan data ke database dengan SweetAlert2
 const saveToDatabase = async () => {
@@ -150,7 +155,7 @@ const saveToDatabase = async () => {
 
             // Filter data sebelum dikirim ke server
             const validData = csvData.value.filter((row) => {
-                return row.t_id && row.tanggal && row.user && row.status && row.tarif && row.pembayaran && row.lokasi && row.kendaraan && row.uji_emisi;
+                return row.t_id && row.user && row.status && row.tarif && row.pembayaran && row.lokasi && row.kendaraan && row.tanggal;
             });
 
             // Kirim data ke API
