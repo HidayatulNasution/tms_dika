@@ -5,7 +5,7 @@
                 <div class="flex flex-wrap justify-between px-4">
                     <div class="mb-6 w-full lg:w-1/2">
                         <div class="flex shrink-0 items-center text-black dark:text-white">
-                            <img src="/assets/images/logo.svg" alt="" class="w-14" />
+                            <img src="/assets/images/logo.png" alt="" class="w-14" />
                         </div>
                         <div class="mt-6 space-y-1 text-gray-500 dark:text-gray-400">
                             <div>13 Tetrick Road, Cypress Gardens, Florida, 33884, US</div>

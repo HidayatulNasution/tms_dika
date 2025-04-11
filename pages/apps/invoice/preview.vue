@@ -31,7 +31,7 @@
             <div class="flex flex-wrap justify-between gap-4 px-4">
                 <div class="text-2xl font-semibold uppercase">Invoice</div>
                 <div class="shrink-0">
-                    <img src="/assets/images/logo.svg" alt="" class="w-14 ltr:ml-auto rtl:mr-auto" />
+                    <img src="/assets/images/logo.png" alt="" class="w-14 ltr:ml-auto rtl:mr-auto" />
                 </div>
             </div>
             <div class="px-4 ltr:text-right rtl:text-left">
