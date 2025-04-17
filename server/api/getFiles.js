@@ -10,13 +10,28 @@ export default defineEventHandler(async (event) => {
     const query = getQuery(event);
     const startDate = query.startDate;
     const endDate = query.endDate;
+    const location = query.location;
+    const payment = query.payment;
 
     // Validate dates
     if (!startDate || !endDate) {
       throw new Error('Start date and end date are required');
     }
 
-    const params = ['%SUCCESS%', startDate, endDate];
+    let params = ['%SUCCESS%', startDate, endDate];
+    let additionalWhere = '';
+
+    // Add location filter if provided
+    if (location) {
+      additionalWhere += ' AND d.name = ?';
+      params.push(location);
+    }
+
+    // Add payment filter if provided
+    if (payment) {
+      additionalWhere += ' AND bg.name = ?';
+      params.push(payment);
+    }
 
     // Query gabungan untuk mendapatkan data dari ketiga tabel
     const [rows] = await pool2.execute(
@@ -28,18 +43,23 @@ export default defineEventHandler(async (event) => {
           f.mid, 
           f.tid, 
           f.username, 
+          f.batch_group_id,
           m.merchant_id, 
-          d.name 
+          d.name as merchant_name,
+          bg.name as batch_group_name
        FROM 
           file_upload_detail f
        JOIN 
           merchant_batch_group m ON f.mid = m.mid
        JOIN 
           merchant_detail d ON m.merchant_id = d.merchant_id
+        LEFT JOIN
+          batch_group bg ON f.batch_group_id = bg.id
        WHERE 
           f.payment_status LIKE ?
           AND DATE(f.created_at) >= '2024-01-01'
           AND DATE(f.created_at) BETWEEN ? AND ?
+          ${additionalWhere}
        ORDER BY 
           f.created_at DESC
        `,

@@ -23,6 +23,21 @@ const rows = ref([]);
 const isLoading = ref(true);
 const search1 = ref('');
 
+// Add these refs after other ref declarations
+const selectedLocation = ref('');
+const selectedPayment = ref('');
+
+// Add these computed properties after other const declarations
+const uniqueLocations = computed(() => {
+    const locations = [...new Set(rows.value.map(row => row.merchant_name))];
+    return ['All', ...locations.filter(Boolean)];
+});
+
+const uniquePayments = computed(() => {
+    const payments = [...new Set(rows.value.map(row => row.batch_group_name))];
+    return ['All', ...payments.filter(Boolean)];
+});
+
 // Format date for API
 const formatDateForAPI = (date) => {
   if (!date) return '';
@@ -50,7 +65,9 @@ const fetchData = async () => {
       method: 'GET',
       params: {
         startDate,
-        endDate
+        endDate,
+        location: selectedLocation.value !== 'All' ? selectedLocation.value : '',
+        payment: selectedPayment.value !== 'All' ? selectedPayment.value : ''
       }
     });
 
@@ -97,26 +114,25 @@ const datatable1Cols = [
   { field: 'request_id', title: 'No. Request' },
   { field: 'created_at', title: 'Tanggal Transaksi' },
   { field: 'base_amount', title: 'Amount'},
+  { field: 'batch_group_name', title: 'Payment' },
   { field: 'payment_status', title: 'Status Payment' },
   { field: 'mid', title: 'MID' },
   { field: 'tid', title: 'TID' },
-  { field: 'username', title: 'Username' },
-  { field: 'merchant_id', title: 'Merchant ID' },
-  { field: 'name', title: 'Username' },
+  { field: 'username', title: 'Code Location' },  
+  { field: 'merchant_name', title: 'Location' },  
 ];
 
 const excelColumns = () => {
   return {
     'Request ID': 'request_id',
     Tanggal: 'created_at',
-    'Base Amount': 'base_amount',          
-    Status: 'status',
+    Amount: 'base_amount', 
+    Payment: 'batch_group_name',  
     'Status Payment': 'payment_status',
     MID: 'mid',
     TID: 'tid',
-    Username: 'username',
-    'Merchant ID': 'merchant_id',
-    Username: 'name'
+    Location: 'merchant_name'   
+    
   };
 };
 
@@ -133,10 +149,26 @@ onMounted(async () => {
 <template>
   <div>
     <div class="panel mt-6 pb-0">
-      <div class="mb-5 flex flex-col gap-5 md:flex-row md:items-center">
+      <div class="mb-5 flex items-center justify-between">
         <h5 class="text-lg font-semibold dark:text-white-light">Monitoring Data Dika</h5>
+
+        <div class="flex items-center gap-4">
+          <input v-model="search1" type="text" class="form-input w-auto" placeholder="🔍 Search" />
+          
+          <vue3-json-excel 
+            class="btn btn-success btn-sm cursor-pointer" 
+            :name="`data_${formatDateForAPI(dateRange.startDate)}_to_${formatDateForAPI(dateRange.endDate)}.xls`"
+            :fields="excelColumns()" 
+            :json-data="excelItems()"
+          >
+            <icon-file class="w-5 h-5 ltr:mr-2 rtl:ml-2" />
+            EXCEL
+          </vue3-json-excel>
+        </div>
+      </div>
         
-        <!-- Date Range Picker -->
+       <!-- Second row: Filters -->
+      <div class="mb-5 flex flex-wrap items-center gap-4">
         <div class="flex items-center gap-2">
           <DatePicker
             v-model="dateRange.startDate"
@@ -160,21 +192,30 @@ onMounted(async () => {
             :max-date="today"
           />
         </div>
-        <button @click="onSearch" class="btn btn-primary h-12">Apply</button>
-
-        <div class="ltr:ml-auto rtl:mr-auto">
-          <input v-model="search1" type="text" class="form-input w-auto" placeholder="🔍 Search" />
-        </div>
-        
-        <vue3-json-excel 
-          class="btn btn-success btn-sm m-1 cursor-pointer" 
-          :name="`data_${formatDateForAPI(dateRange.startDate)}_to_${formatDateForAPI(dateRange.endDate)}.xls`"
-          :fields="excelColumns()" 
-          :json-data="excelItems()"
+        <button @click="onSearch" class="btn btn-primary">Apply</button>
+        <div style="display: flex; gap: 1rem; align-items: center; width: 100%; margin-top: 1rem;">
+          <select
+          v-model="selectedLocation"
+          class="form-select"
+          @change="onSearch"
         >
-          <icon-file class="w-5 h-5 ltr:mr-2 rtl:ml-2" />
-          EXCEL
-        </vue3-json-excel>
+          <option disabled value="">Select Location</option>
+          <option v-for="location in uniqueLocations" :key="location" :value="location">
+            {{ location }}
+          </option>
+        </select>
+
+        <select
+          v-model="selectedPayment"
+          class="form-select"
+          @change="onSearch"
+        >
+          <option disabled value="">Select Payment</option>
+          <option v-for="payment in uniquePayments" :key="payment" :value="payment">
+            {{ payment }}
+          </option>
+        </select>
+        </div>                
       </div>
 
       <div class="datatable">
