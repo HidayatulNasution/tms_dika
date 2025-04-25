@@ -116,6 +116,7 @@ const datatable1Cols = [
   { field: 'base_amount', title: 'Amount'},
   { field: 'batch_group_name', title: 'Payment' },
   { field: 'payment_status', title: 'Status Payment' },
+  { field: 'upload_status', title: 'Upload Status'},
   { field: 'mid', title: 'MID' },
   { field: 'tid', title: 'TID' },
   { field: 'username', title: 'Code Location' },  
@@ -129,6 +130,7 @@ const excelColumns = () => {
     Amount: 'base_amount', 
     Payment: 'batch_group_name',  
     'Status Payment': 'payment_status',
+    'Upload Status': 'upload_status',
     MID: 'mid',
     TID: 'tid',
     Location: 'merchant_name'   

@@ -46,7 +46,8 @@ export default defineEventHandler(async (event) => {
           f.batch_group_id,
           m.merchant_id, 
           d.name as merchant_name,
-          bg.name as batch_group_name
+          bg.name as batch_group_name,
+          fu.status as upload_status
        FROM 
           file_upload_detail f
        JOIN 
@@ -55,6 +56,8 @@ export default defineEventHandler(async (event) => {
           merchant_detail d ON m.merchant_id = d.merchant_id
         LEFT JOIN
           batch_group bg ON f.batch_group_id = bg.id
+        LEFT JOIN
+         file_upload fu ON f.file_upload_id = fu.id 
        WHERE 
           f.payment_status LIKE ?
           AND DATE(f.created_at) >= '2024-01-01'
