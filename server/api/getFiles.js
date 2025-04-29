@@ -64,7 +64,7 @@ export default defineEventHandler(async (event) => {
           AND DATE(f.created_at) BETWEEN ? AND ?
           ${additionalWhere}
        ORDER BY 
-          f.created_at DESC
+          f.modified_at DESC
        `,
       params
     );
