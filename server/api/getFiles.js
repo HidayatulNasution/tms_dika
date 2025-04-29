@@ -44,6 +44,7 @@ export default defineEventHandler(async (event) => {
           f.tid, 
           f.username, 
           f.batch_group_id,
+          f.settle,
           m.merchant_id, 
           d.name as merchant_name,
           bg.name as batch_group_name,

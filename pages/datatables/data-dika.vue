@@ -109,6 +109,10 @@ const colorAmount = () => {
   return 'dark';
 };
 
+const settleColor = (status) => {
+  return status === 1 ? 'success' : 'danger';
+};
+
 // Define columns for the datatable
 const datatable1Cols = [
   { field: 'request_id', title: 'No. Request' },
@@ -117,6 +121,7 @@ const datatable1Cols = [
   { field: 'batch_group_name', title: 'Payment' },
   { field: 'payment_status', title: 'Status Payment' },
   { field: 'upload_status', title: 'Upload Status'},
+  { field: 'settle', title: 'Settle Status'},
   { field: 'mid', title: 'MID' },
   { field: 'tid', title: 'TID' },
   { field: 'username', title: 'Code Location' },  
@@ -131,6 +136,7 @@ const excelColumns = () => {
     Payment: 'batch_group_name',  
     'Status Payment': 'payment_status',
     'Upload Status': 'upload_status',
+    'Settle Status': 'settle',
     MID: 'mid',
     TID: 'tid',
     Location: 'merchant_name'   
@@ -139,7 +145,10 @@ const excelColumns = () => {
 };
 
 const excelItems = () => {
-  return rows.value;
+  return rows.value.map(row => ({
+    ...row,
+    settle: row.settle === 1 ? 'Settle' : 'Unsettle'
+  }));
 };
 
 // Fetch data on component mount
@@ -259,6 +268,11 @@ onMounted(async () => {
           <template #payment_status="data">
             <div class="badge" :class="`bg-${viewColor()}`">
               {{ data.value.payment_status }}
+            </div>
+          </template>
+          <template #settle="data">
+            <div class="badge" :class="`bg-${settleColor(data.value.settle)}`">
+              {{ data.value.settle === 1 ? 'Settle' : 'Unsettle' }}
             </div>
           </template>
         </vue3-datatable>
