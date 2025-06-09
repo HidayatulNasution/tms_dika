@@ -1,4 +1,4 @@
-<template>
+<template> 
     <div>
         <ul class="flex space-x-2 rtl:space-x-reverse">
             <li>
@@ -44,7 +44,7 @@
                     </div>                    -->
                 </div>  
                               <!-- Sinkronisasi -->
-                 <div class="panel bg-gradient-to-r from-violet-500 to-violet-400">
+                 <div class="panel bg-gradient-to-r from-yellow-400 to-yellow-400">
                     <div class="flex justify-between">
                         <div class="text-md font-semibold ltr:mr-1 rtl:ml-1">Sinkronisasi Data</div>
                         <div class="dropdown">
@@ -107,7 +107,7 @@
                         Last Week 37,894
                     </div> -->
                 </div>
-                <div class="panel bg-gradient-to-r from-fuchsia-500 to-fuchsia-400">
+                <div class="panel bg-gradient-to-r from-yellow-500 to-yellow-500">
                     <div class="flex justify-between">
                         <div class="text-md font-semibold ltr:mr-1 rtl:ml-1">History Data</div>
                         <div class="dropdown">
