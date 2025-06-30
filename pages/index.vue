@@ -32,29 +32,29 @@
                         </NuxtLink>
                         <div class="dropdown ms-auto w-max">
                             <client-only>
-                                    <template #content="{ close }">
-                                        <ul
-                                            class="grid w-[280px] grid-cols-2 gap-2 !px-2 font-semibold text-dark dark:text-white-dark dark:text-white-light/90"
-                                        >
-                                            <template v-for="item in store.languageList" :key="item.code">
-                                                <li>
-                                                    <button
-                                                        type="button"
-                                                        class="w-full hover:text-primary"
-                                                        :class="{ 'bg-primary/10 text-primary': store.locale === item.code }"
-                                                        @click="changeLanguage(item), close()"
-                                                    >
-                                                        <img
-                                                            class="h-5 w-5 rounded-full object-cover"
-                                                            :src="`/assets/images/flags/${item.code.toUpperCase()}.svg`"
-                                                            alt=""
-                                                        />
-                                                        <span class="ltr:ml-3 rtl:mr-3">{{ item.name }}</span>
-                                                    </button>
-                                                </li>
-                                            </template>
-                                        </ul>
-                                    </template>                            
+                                <template #content="{ close }">
+                                    <ul
+                                        class="grid w-[280px] grid-cols-2 gap-2 !px-2 font-semibold text-dark dark:text-white-dark dark:text-white-light/90"
+                                    >
+                                        <template v-for="item in store.languageList" :key="item.code">
+                                            <li>
+                                                <button
+                                                    type="button"
+                                                    class="w-full hover:text-primary"
+                                                    :class="{ 'bg-primary/10 text-primary': store.locale === item.code }"
+                                                    @click="changeLanguage(item), close()"
+                                                >
+                                                    <img
+                                                        class="h-5 w-5 rounded-full object-cover"
+                                                        :src="`/assets/images/flags/${item.code.toUpperCase()}.svg`"
+                                                        alt=""
+                                                    />
+                                                    <span class="ltr:ml-3 rtl:mr-3">{{ item.name }}</span>
+                                                </button>
+                                            </li>
+                                        </template>
+                                    </ul>
+                                </template>                            
                             </client-only>
                         </div>
                     </div>
@@ -73,10 +73,15 @@
                                         v-model="formData.username"
                                         placeholder="Enter Username" 
                                         class="form-input ps-10 placeholder:text-white-dark"
-                                        autocomplete="off" 
+                                        autocomplete="off"
+                                        :disabled="isLoading"
+                                        required
                                     />
                                     <span class="absolute start-4 top-1/2 -translate-y-1/2">
-                                        <icon-user :fill="true" />
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                                            <circle cx="12" cy="6" r="4" stroke="currentColor" stroke-width="1.5"/>
+                                            <path d="M20 17.5c0 2.485 0 4.5-8 4.5s-8-2.015-8-4.5S7.582 13 12 13s8 2.015 8 4.5Z" stroke="currentColor" stroke-width="1.5"/>
+                                        </svg>
                                     </span>
                                 </div>
                             </div>
@@ -88,15 +93,34 @@
                                         type="password" 
                                         v-model="formData.password"
                                         placeholder="Enter Password" 
-                                        class="form-input ps-10 placeholder:text-white-dark" 
+                                        class="form-input ps-10 placeholder:text-white-dark"
+                                        :disabled="isLoading"
+                                        required
                                     />
                                     <span class="absolute start-4 top-1/2 -translate-y-1/2">
-                                        <icon-lock-dots :fill="true" />
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                                            <path d="M2 16C2 13.1716 2 11.7574 2.87868 10.8787C3.75736 10 5.17157 10 8 10H16C18.8284 10 20.2426 10 21.1213 10.8787C22 11.7574 22 13.1716 22 16C22 18.8284 22 20.2426 21.1213 21.1213C20.2426 22 18.8284 22 16 22H8C5.17157 22 3.75736 22 2.87868 21.1213C2 20.2426 2 18.8284 2 16Z" stroke="currentColor" stroke-width="1.5"/>
+                                            <circle cx="8" cy="16" r="2" fill="currentColor"/>
+                                            <circle cx="16" cy="16" r="2" fill="currentColor"/>
+                                            <circle cx="12" cy="16" r="2" fill="currentColor"/>
+                                            <path d="M6 10V8C6 5.79086 7.79086 4 10 4H14C16.2091 4 18 5.79086 18 8V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                        </svg>
                                     </span>
                                 </div>
-                            </div>                            
-                            <button type="submit" class="btn btn-primary !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
-                                Sign in
+                            </div>
+
+                            <div v-if="isLoading" class="text-center py-4">
+                                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+                                <p class="text-white-dark">{{ loadingMessage }}</p>
+                            </div>
+
+                            <button 
+                                type="submit" 
+                                :disabled="isLoading || !formData.username || !formData.password"
+                                class="btn btn-primary !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)] disabled:opacity-50"
+                            >
+                                <span v-if="!isLoading">Sign in</span>
+                                <span v-else>{{ loadingMessage }}</span>
                             </button>
                         </form>
                     </div>
@@ -109,8 +133,6 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { computed } from 'vue';
-import appSetting from '@/app-setting';
 import { useAppStore } from '@/stores/index';
 import { useRouter } from 'vue-router';
 import Swal from 'sweetalert2';
@@ -122,60 +144,98 @@ definePageMeta({
 });
 
 const store = useAppStore();
-const { setLocale } = useI18n();
 
 const formData = ref({
     username: '',
     password: ''
 });
 
+const isLoading = ref(false);
+const loadingMessage = ref('Authenticating...');
+
 const handleLogin = async () => {
+    isLoading.value = true;
+    loadingMessage.value = 'Verifying credentials...';
+    
     try {
-        const response = await fetch('/api/auth/login', {
+        // Step 1: Login with username and password
+        const loginResponse = await $fetch('/api/auth/login', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData.value),
+            body: {
+                username: formData.value.username,
+                password: formData.value.password
+            }
         });
 
-        const data = await response.json();
-
-        if (data.status === 200) {
-            // Save token in cookie
-            useCookie('authToken').value = data.data.token;
+        if (loginResponse.status === 200) {
+            // Save auth token from login
+            const authTokenCookie = useCookie('authToken', {
+                maxAge: 60 * 60 * 1000, // 1 hour
+                secure: true,
+                sameSite: 'strict'
+            });
+            authTokenCookie.value = loginResponse.data.token;
             
             // Set user role in store
-            store.setUserRole(data.data.role);
+            store.setUserRole(loginResponse.data.role);
 
-            const welcomeMessage = `Selamat Datang ${data.data.role === 'admin' ? 'Admin' : 'User'} ${data.data.username}!`;
-            await Swal.fire({
-                icon: 'success',
-                title: 'Login Successful!',
-                text: welcomeMessage,
-                timer: 1500,
-                showConfirmButton: false
+            // Step 2: Get access token for API access
+            loadingMessage.value = 'Getting access token...';
+            
+            const accessTokenResponse = await $fetch('/api/auth/access-token', {
+                method: 'POST',
+                body: {
+                    grantType: 'client_credentials'
+                }
             });
-            router.push('/datatables/proses-data');
+
+            if (accessTokenResponse.data && accessTokenResponse.data.accessToken) {
+                // Save access token
+                const accessTokenCookie = useCookie('accessToken', {
+                    maxAge: parseInt(accessTokenResponse.data.expiresIn) * 1000,
+                    secure: true,
+                    sameSite: 'strict'
+                });
+                accessTokenCookie.value = accessTokenResponse.data.accessToken;
+
+                // Show success message
+                const welcomeMessage = `Selamat Datang ${loginResponse.data.role === 'admin' ? 'Admin' : 'User'} ${loginResponse.data.username}!`;
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Login Successful!',
+                    text: welcomeMessage,
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+                
+                // Redirect to dashboard
+                await router.push('/bapenda/data-bapenda');
+            } else {
+                throw new Error('Failed to get access token');
+            }
         } else {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error!',
-                text: data.message,
-            });
+            throw new Error(loginResponse.message || 'Login failed');
         }
-    } catch (error) {
-        console.error('Login error:', error);
-        Swal.fire({
+    } catch (error: any) {
+        console.error('Authentication error:', error);
+        
+        // Clear any stored tokens on error
+        useCookie('authToken').value = null;
+        useCookie('accessToken').value = null;
+        
+        await Swal.fire({
             icon: 'error',
-            title: 'Error!',
-            text: 'An error occurred during login',
+            title: 'Authentication Error!',
+            text: error.data?.message || error.message || 'Failed to authenticate. Please check your credentials.',
         });
+    } finally {
+        isLoading.value = false;
+        loadingMessage.value = 'Authenticating...';
     }
 };
 
-// multi language
+// Language change function (if needed)
 const changeLanguage = (item: any) => {
-    appSetting.toggleLanguage(item, setLocale);
+    store.setLocale(item.code);
 };
 </script>

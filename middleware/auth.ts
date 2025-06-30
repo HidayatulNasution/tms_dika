@@ -35,6 +35,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
     // Hapus token dari cookie
     useCookie('authToken').value = null;
+    useCookie('accessToken').value = null;
 
     // Tampilkan notifikasi jika token tidak valid atau kadaluarsa
     await Swal.fire({
@@ -50,3 +51,11 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     return;
   }
 });
+
+// export default defineNuxtRouteMiddleware((to, from) => {
+//   const accessToken = useCookie('accessToken');
+  
+//   if (!accessToken.value) {
+//     return navigateTo('/');
+//   }
+// });

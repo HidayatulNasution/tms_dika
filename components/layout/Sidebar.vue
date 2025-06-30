@@ -48,9 +48,37 @@
                                         <li>
                                             <NuxtLink to="/datatables/data-dika" @click="toggleMobileMenu">{{ $t('data-dika') }}</NuxtLink>
                                         </li>                                      
-                                        <li>
+                                        <li> 
                                             <NuxtLink to="/datatables/proses-data" @click="toggleMobileMenu">{{ $t('proses-data') }}</NuxtLink>
                                         </li>
+                                    </ul>
+                                </vue-collapsible>
+                            </li>
+
+                            <li class="menu nav-item">
+                                <button
+                                    type="button"
+                                    class="nav-link group w-full"
+                                    :class="{ active: activeDropdown === 'bapenda' }"
+                                    @click="activeDropdown === 'bapenda' ? (activeDropdown = null) : (activeDropdown = 'bapenda')"
+                                >
+                                    <div class="flex items-center">
+                                        <icon-menu-datatables class="shrink-0 group-hover:!text-primary" />
+
+                                        <span class="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">{{
+                                            $t('bapenda')
+                                        }}</span>
+                                    </div>
+                                    <div :class="{ '-rotate-90 rtl:rotate-90': activeDropdown !== 'bapenda' }">
+                                        <icon-caret-down />
+                                    </div>
+                                </button>
+                                <vue-collapsible :isOpen="activeDropdown === 'bapenda'">
+                                    <ul class="sub-menu text-gray-500">                                  
+                                        <li>
+                                            <NuxtLink to="/bapenda/data-bapenda" @click="toggleMobileMenu">{{ $t('data-bapenda') }}</NuxtLink>
+                                        </li>                                      
+                                       
                                     </ul>
                                 </vue-collapsible>
                             </li>

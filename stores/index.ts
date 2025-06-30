@@ -42,6 +42,9 @@ export const useAppStore = defineStore('app', {
             this.userRole = role;
             localStorage.setItem('userRole', role); // Persist role in localStorage
         },
+        setLocale(locale: string) {
+            this.locale = locale;
+        },
 
         initializeUserRole() {
             const savedRole = localStorage.getItem('userRole');
