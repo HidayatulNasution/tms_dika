@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
       if (query.to) params.append('to', query.to as string);
       if (query.page) params.append('page', query.page as string);
       if (query.limit) params.append('limit', query.limit as string);
-  
+    // api ekternal
       const apiUrl = `https://dev.bapenda-api.dika.co.id/vbs/api/v1/report/trx-by-created-date?${params.toString()}`;
       
       const response = await fetch(apiUrl, {
